@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação de Solicitações - Instituição Financeira</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link.active {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .page-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f59e0b;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Filters */
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .filter-input {
+            padding: 8px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+
+        .filter-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+        }
+
+        /* Solicitations List */
+        .solicitations-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .list-header {
+            background: #f9fafb;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .solicitation-item {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .solicitation-item:hover {
+            background: #f8fafc;
+        }
+
+        .solicitation-item.selected {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+        }
+
+        .solicitation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .solicitation-id {
+            font-weight: bold;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .solicitation-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .solicitation-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .detail-item {
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #374151;
+        }
+
+        .solicitation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-low {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Detail Panel */
+        .detail-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Cooperative Info */
+        .coop-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        /* Risk Analysis */
+        .risk-score {
+            text-align: center;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .risk-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .risk-low {
+            color: #059669;
+        }
+
+        .risk-medium {
+            color: #f59e0b;
+        }
+
+        .risk-high {
+            color: #dc2626;
+        }
+
+        .risk-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .risk-factors {
+            list-style: none;
+        }
+
+        .risk-factors li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .risk-factors li:last-child {
+            border-bottom: none;
+        }
+
+        /* Documents */
+        .documents-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: #f9fafb;
+        }
+
+        .document-name {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .document-action {
+            font-size: 12px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Decision Actions */
+        .decision-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .observation-field {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .observation-field:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-approve {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #047857;
+        }
+
+        .btn-reject {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #b91c1c;
+        }
+
+        .btn-hold {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-hold:hover {
+            background: #4b5563;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-panel {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-input {
+                min-width: 100%;
+            }
+
+            .page-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .solicitation-details {
+                grid-template-columns: 1fr;
+            }
+
+            .coop-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">FinCredit Pro</div>
+            <div class="user-info">
+                <span>João Silva - Analista Senior</span>
+                <div style="width: 40px; height: 40px; background: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">👤</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <div class="nav-links">
+                <a href="./dasboard.html" class="nav-link">Dashboard</a>
+                <a href="./avaliaca.html" class="nav-link active">Avaliações</a>
+                <a href="./historico.html" class="nav-link">Histórico</a>
+                <a href="./relatorio.html" class="nav-link">Relatórios</a>
+                <a href="#" class="nav-link">Cooperativas</a>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">Avaliação de Solicitações</div>
+            <div class="page-stats">
+                <div class="stat-item">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Pendentes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Hoje</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Atrasadas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label class="filter-label">Cooperativa</label>
+                    <select class="filter-input">
+                        <option>Todas as cooperativas</option>
+                        <option>Cooperativa São João</option>
+                        <option>Cooperativa Agro Sul</option>
+                        <option>Cooperativa Verde Campo</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Valor Mínimo</label>
+                    <input type="number" class="filter-input" placeholder="R$ 0">
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Valor Máximo</label>
+                    <input type="number" class="filter-input" placeholder="R$ 500.000">
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Prioridade</label>
+                    <select class="filter-input">
+                        <option>Todas</option>
+                        <option>Alta</option>
+                        <option>Média</option>
+                        <option>Baixa</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Data Limite</label>
+                    <input type="date" class="filter-input">
+                </div>
+
+                <button class="filter-btn">🔍 Filtrar</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Solicitations List -->
+            <div class="solicitations-list">
+                <div class="list-header">
+                    Solicitações Pendentes (23)
+                </div>
+
+                <div class="solicitation-item selected">
+                    <div class="solicitation-header">
+                        <div class="solicitation-id">#2024-0156</div>
+                        <div class="solicitation-amount">R$ 50.000</div>
+                    </div>
+                    <div class="solicitation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cooperativa:</span>
+                            <span class="detail-value">São João</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Prazo:</span>
+                            <span class="detail-value">24 meses</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Finalidade:</span>
+                            <span class="detail-value">Capital de Giro</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Garantia:</span>
+                            <span class="detail-value">Safra Futura</span>
+                        </div>
+                    </div>
+                    <div class="solicitation-meta">
+                        <span>Recebida há 2 horas</span>
+                        <span class="priority-badge priority-high">Alta Prioridade</span>
+                    </div>
+                </div>
+
+                <div class="solicitation-item">
+                    <div class="solicitation-header">
+                        <div class="solicitation-id">#2024-0157</div>
+                        <div class="solicitation-amount">R$ 120.000</div>
+                    </div>
+                    <div class="solicitation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cooperativa:</span>
+                            <span class="detail-value">Agro Sul</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Prazo:</span>
+                            <span class="detail-value">36 meses</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Finalidade:</span>
+                            <span class="detail-value">Equipamentos</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Garantia:</span>
+                            <span class="detail-value">Imóvel Rural</span>
+                        </div>
+                    </div>
+                    <div class="solicitation-meta">
+                        <span>Recebida há 4 horas</span>
+                        <span class="priority-badge priority-medium">Média Prioridade</span>
+                    </div>
+                </div>
+
+                <div class="solicitation-item">
+                    <div class="solicitation-header">
+                        <div class="solicitation-id">#2024-0158</div>
+                        <div class="solicitation-amount">R$ 75.000</div>
+                    </div>
+                    <div class="solicitation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cooperativa:</span>
+                            <span class="detail-value">Verde Campo</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Prazo:</span>
+                            <span class="detail-value">18 meses</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Finalidade:</span>
+                            <span class="detail-value">Custeio</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Garantia:</span>
+                            <span class="detail-value">Aval Solidário</span>
+                        </div>
+                    </div>
+                    <div class="solicitation-meta">
+                        <span>Recebida há 1 dia</span>
+                        <span class="priority-badge priority-low">Baixa Prioridade</span>
+                    </div>
+                </div>
+
+                <div class="solicitation-item">
+                    <div class="solicitation-header">
+                        <div class="solicitation-id">#2024-0159</div>
+                        <div class="solicitation-amount">R$ 200.000</div>
+                    </div>
+                    <div class="solicitation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cooperativa:</span>
+                            <span class="detail-value">Leste Unidos</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Prazo:</span>
+                            <span class="detail-value">48 meses</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Finalidade:</span>
+                            <span class="detail-value">Expansão</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Garantia:</span>
+                            <span class="detail-value">Múltiplas</span>
+                        </div>
+                    </div>
+                    <div class="solicitation-meta">
+                        <span>Recebida há 2 dias</span>
+                        <span class="priority-badge priority-high">Alta Prioridade</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Panel -->
+            <div class="detail-panel">
+                <!-- Cooperative Information -->
+                <div class="detail-card">
+                    <div class="card-title">🏛️ Informações da Cooperativa</div>
+                    <div class="coop-info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Nome</div>
+                            <div class="info-value">Cooperativa São João</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">CNPJ</div>
+                            <div class="info-value">12.345.678/0001-90</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Fundação</div>
+                            <div class="info-value">1995</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Cooperados</div>
+                            <div class="info-value">1.247</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Patrimônio Líquido</div>
+                            <div class="info-value">R$ 8.500.000</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Último Crédito</div>
+                            <div class="info-value">Jan/2024</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Analysis -->
+                <div class="detail-card">
+                    <div class="card-title">⚠️ Análise de Risco</div>
+                    <div class="risk-score">
+                        <div class="risk-number risk-medium">7.2</div>
+                        <div class="risk-label">Score de Risco</div>
+                    </div>
+                    <ul class="risk-factors">
+                        <li><span>Histórico de Pagamento</span><span style="color: #059669;">✓ Excelente</span></li>
+                        <li><span>Capacidade Financeira</span><span style="color: #059669;">✓ Boa</span></li>
+                        <li><span>Garantias Oferecidas</span><span style="color: #f59e0b;">⚠ Adequada</span></li>
+                        <li><span>Setor de Atuação</span><span style="color: #f59e0b;">⚠ Médio Risco</span></li>
+                        <li><span>Análise Documental</span><span style="color: #059669;">✓ Completa</span></li>
+                    </ul>
+                </div>
+
+                <!-- Documents -->
+                <div class="detail-card">
+                    <div class="card-title">📄 Documentos</div>
+                    <div class="documents-list">
+                        <div class="document-item">
+                            <span class="document-name">📋 Formulário de Solicitação</span>
+                            <a href="#" class="document-action">Ver</a>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-name">📊 Demonstrações Financeiras</span>
+                            <a href="#" class="document-action">Ver</a>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-name">🏠 Documentos de Garantia</span>
+                            <a href="#" class="document-action">Ver</a>
+                        </div>
+                        <div class="document-item">
+                            <span class="document-name">✅ Certidões Negativas</span>
+                            <a href="#" class="document-action">Ver</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Actions -->
+                <div class="detail-card">
+                    <div class="card-title">⚖️ Decisão</div>
+                    <div class="decision-actions">
+                        <textarea class="observation-field" placeholder="Observações e justificativas para a decisão..."></textarea>
+                        <div class="action-buttons">
+                            <button class="btn btn-approve">✅ Aprovar</button>
+                            <button class="btn btn-reject">❌ Rejeitar</button>
+                            <button class="btn btn-hold">⏸️ Em Análise</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Decisões - Instituição Financeira</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link.active {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .approved { color: #059669; }
+        .rejected { color: #dc2626; }
+        .total-volume { color: #2563eb; }
+        .avg-time { color: #7c3aed; }
+
+        /* Filters and Search */
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filters-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .export-btn:hover {
+            background: #047857;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .filter-input {
+            padding: 8px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-btn, .clear-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .search-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .clear-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: #4b5563;
+        }
+
+        /* Results Table */
+        .results-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .results-header {
+            background: #f9fafb;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .decisions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .decisions-table th {
+            background: #f9fafb;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .decisions-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .decisions-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .solicitation-id {
+            font-weight: 600;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .solicitation-id:hover {
+            text-decoration: underline;
+        }
+
+        .cooperative-name {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .amount {
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .status-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .analyst-name {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .decision-date {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-view {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .btn-view:hover {
+            background: #dbeafe;
+        }
+
+        .btn-notes {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-notes:hover {
+            background: #e5e7eb;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 20px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .pagination-info {
+            color: #6b7280;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .page-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .page-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Detail Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .close-btn:hover {
+            color: #374151;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-section {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .detail-section h4 {
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .decision-notes {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .decision-notes h4 {
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .notes-text {
+            color: #6b7280;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .filters-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                font-size: 12px;
+            }
+
+            .decisions-table th,
+            .decisions-table td {
+                padding: 8px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">FinCredit Pro</div>
+            <div class="user-info">
+                <span>João Silva - Analista Senior</span>
+                <div style="width: 40px; height: 40px; background: #e5e7eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">👤</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <div class="nav-links">
+                <a href="./dasboard.html" class="nav-link">Dashboard</a>
+                <a href="./avaliaca.html" class="nav-link">Avaliações</a>
+                <a href="./historico.html" class="nav-link active">Histórico</a>
+                <a href="./relatorio.html" class="nav-link">Relatórios</a>
+                <a href="#" class="nav-link">Cooperativas</a>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">Histórico de Decisões</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number approved">1,247</div>
+                    <div class="stat-label">Total Aprovadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number rejected">156</div>
+                    <div class="stat-label">Total Rejeitadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number total-volume">R$ 45.2M</div>
+                    <div class="stat-label">Volume Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number avg-time">2.3 dias</div>
+                    <div class="stat-label">Tempo Médio</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+            <div class="filters-header">
+                <div class="filters-title">Filtros e Busca</div>
+                <button class="export-btn">📊 Exportar Dados</button>
+            </div>
+
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-input">
+                        <option>Todos</option>
+                        <option>Aprovadas</option>
+                        <option>Rejeitadas</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Cooperativa</label>
+                    <select class="filter-input">
+                        <option>Todas</option>
+                        <option>Cooperativa São João</option>
+                        <option>Cooperativa Agro Sul</option>
+                        <option>Cooperativa Verde Campo</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Data Inicial</label>
+                    <input type="date" class="filter-input" value="2024-01-01">
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Data Final</label>
+                    <input type="date" class="filter-input" value="2024-06-15">
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Analista</label>
+                    <select class="filter-input">
+                        <option>Todos</option>
+                        <option>João Silva</option>
+                        <option>Maria Santos</option>
+                        <option>Carlos Lima</option>
+                        <option>Ana Costa</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Valor Mínimo</label>
+                    <input type="number" class="filter-input" placeholder="R$ 0">
+                </div>
+            </div>
+
+            <div class="search-row">
+                <input type="text" class="search-input" placeholder="Buscar por ID da solicitação, cooperativa ou observações...">
+                <button class="search-btn">🔍 Buscar</button>
+                <button class="clear-btn">🔄 Limpar</button>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="results-section">
+            <div class="results-header">
+                <div class="results-title">Resultados</div>
+                <div class="results-count">Mostrando 1-25 de 1,403 registros</div>
+            </div>
+
+            <div class="table-container">
+                <table class="decisions-table">
+                    <thead>
+                        <tr>
+                            <th>ID Solicitação</th>
+                            <th>Cooperativa</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Data Decisão</th>
+                            <th>Analista</th>
+                            <th>Tempo Análise</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="#" class="solicitation-id">#2024-0155</a></td>
+                            <td><div class="cooperative-name">Cooperativa Agro Sul</div></td>
+                            <td><div class="amount">R$ 120.000</div></td>
+                            <td><span class="status-badge status-approved">Aprovada</span></td>
+                            <td><div class="decision-date">14/06/2024 16:45</div></td>
+                            <td><div class="analyst-name">João Silva</div></td>
+                            <td>6 horas</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="action-btn btn-view" onclick="openModal()">👁️</button>
+                                    <button class="action-btn btn-notes">📝</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="#" class="solicitation-id">#2024-0154</a></td>
+                            <td><div class="cooperative-name">Cooperativa Verde Campo</div></td>
+                            <td><div class="amount">R$ 75.000</div></td>
+                            <td><span class="status-badge status-rejected">Rejeitada</span></td>
+                            <td><div class="decision-date">14/06/2024 14:20</div></td>
+                            <td><div class="analyst-name">Carlos Lima</div></td>
+                            <td>4 horas</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="action-btn btn-view">👁️</button>
+                                    <button class="action-btn btn-notes">📝</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="#" class="solicitation-id">#2024-0153</a></td>
+                            <td><div class="cooperative-name">Cooperativa Leste</div></td>
+                            <td><div class="amount">R$ 200.000</div></td>
+                            <td><span class="status-badge status-approved">Aprovada</span></td>
+                            <td><div class="decision-date">13/06/2024 11:30</div></td>
+                            <td><div class="analyst-name">Ana Costa</div></td>
+                            <td>1 dia</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="action-btn btn-view">👁️</button>
+                                    <button class="action-btn btn-notes">📝</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="#" class="solicitation-id">#2024-0152</a></td>
+                            <td><div class="cooperative-name">Cooperativa Norte</div></td>
+                            <td><div class="amount">R$ 90.000</div></td>
+                            <td><span class="status-badge status-approved">Aprovada</span></td>
+                            <td><div class="decision-date">13/06/2024 09:15</div></td>
+                            <td><div class="analyst-name">Pedro Rocha</div></td>
+                            <td>3 horas</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="action-btn btn-view">👁️</button>
+                                    <button class="action-btn btn-notes">📝</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="#" class="solicitation-id">#2024-0151</a></td>
+                            <td><div class="cooperative-name">Cooperativa São João</div></td>
+                            <td><div class="amount">R$ 45.000</div></td>
+                            <td><span class="status-badge status-rejected">Rejeitada</span></td>
+                            <td><div class="decision-date">12/06/2024 16:00</div></td>
+                            <td><div class="analyst-name">Maria Santos</div></td>
+                            <td>8 horas</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="action-btn btn-view">👁️</button>
+                                    <button class="action-btn btn-notes">📝</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="#" class="solicitation-id">#2024-0150</a></td>
+                            <td><div class="cooperative-name">Cooperativa União</div></td>
+                            <td><div class="amount">R$ 180.000</div></td>
+                            <td><span class="status-badge status-approved">Aprovada</span></td>
+                            <td><div class="decision-date">12/06/2024 13:45</div></td>
+                            <td><div class="analyst-name">João Silva</div></td>
+                            <td>2 dias</td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="action-btn btn-view">👁️</button>
+                                    <button class="action-btn btn-notes">📝</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info">
+                    Mostrando 1 a 25 de 1,403 registros
+                </div>
+                <div class="pagination-controls">
+                    <button class="page-btn" disabled>« Anterior</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">57</button>
+                    <button class="page-btn">Próximo »</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Detalhes da Solicitação #2024-0155</div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <h4>Informações da Solicitação</h4>
+                    <div class="detail-item">
+                        <span class="detail-label">ID:</span>
+                        <span class="detail-value">#2024-0155</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Valor:</span>
+                        <span class="detail-value">R$ 120.000</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Prazo:</span>
+                        <span class="detail-value">36 meses</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Finalidade:</span>
+                        <span class="detail-value">Equipamentos</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Garantia:</span>
+                        <span class="detail-value">Imóvel Rural</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Dados da Cooperativa</h4>
+                    <div class="detail-item">
+                        <span class="detail-label">Nome:</span>
+                        <span class="detail-value">Cooperativa Agro Sul</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">CNPJ:</span>
+                        <span class="detail-value">12.345.678/0001-90</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cooperados:</span>
+                        <span class="detail-value">1.247</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Score de Risco:</span>
+                        <span class="detail-value">6.8 (Baixo)</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>Processo de Análise</h4>
+                    <div class="detail-item">
+                        <span class="detail-label">Data Recebimento:</span>
+                        <span class="detail-value">14/06/2024 10:30</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Data Decisão:</span>
+                        <span class="detail-value">14/06/2024 16:45</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Tempo de Análise:</span>
+                        <span class="detail-value">6 horas</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Analista:</span>
+                        <span class="detail-value">João Silva</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value" style="color: #059669; font-weight: bold;">APROVADA</span>
+                    </div>
+                </div>
+
+                <div
