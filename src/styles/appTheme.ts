@@ -239,7 +239,7 @@ export const appTheme = {
           DEFAULT: '#52525b',
           foreground: '#fff',
         },
-        focus: '#006FEE',
+        focus: '#027335',
         overlay: '#ffffff',
         divider: '#ffffff',
       },
