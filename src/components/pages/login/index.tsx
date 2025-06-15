@@ -1,4 +1,4 @@
-import { addToast, Card, CardBody, CardHeader, cn } from '@heroui/react'
+import { Card, CardBody, CardHeader, cn } from '@heroui/react'
 import { Form } from '@heroui/form'
 import { Button } from '@heroui/button'
 import { Input } from '@heroui/input'
@@ -14,19 +14,18 @@ export function LoginPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const formData = new FormData(e.currentTarget)
+    // const formData = new FormData(e.currentTarget)
 
     startTransition(() => {
       // const response = await loginAction(formData)
-
-      if (!'response.success') {
-        addToast({
-          color: 'danger',
-          description: 'response.message',
-          shouldShowTimeoutProgress: true,
-          variant: 'bordered',
-        })
-      }
+      // if (!'response.success') {
+      //   addToast({
+      //     color: 'danger',
+      //     description: 'response.message',
+      //     shouldShowTimeoutProgress: true,
+      //     variant: 'bordered',
+      //   })
+      // }
     })
   }
 
