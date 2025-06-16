@@ -7,8 +7,8 @@ export function FallbackRoute() {
   const isAuthenticated = useAuth()
 
   return isAuthenticated ? (
-    <Navigate replace to="/dashboard" />
-  ) : (
     <Navigate replace to="/" />
+  ) : (
+    <Navigate replace to="/login" />
   )
 }

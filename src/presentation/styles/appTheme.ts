@@ -241,7 +241,6 @@ export const appTheme = {
         },
         focus: '#027335',
         overlay: '#ffffff',
-        divider: '#ffffff',
       },
     },
   },

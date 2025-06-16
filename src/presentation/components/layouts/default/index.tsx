@@ -1,26 +1,33 @@
-import { Link } from '@heroui/react'
 import { Outlet } from 'react-router-dom'
+import React from 'react'
+import { cn } from '@heroui/theme'
 
-import { Navbar } from '@/components/navbar'
+import { Navbar } from '@/presentation/components/navbar'
 
 export function DefaultLayout() {
+  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(false)
+
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded)
+  }
+
   return (
-    <div className="relative flex flex-col h-screen">
-      <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-        <Outlet />
-      </main>
-      <footer className="w-full flex items-center justify-center py-3">
-        <Link
-          isExternal
-          className="flex items-center gap-1 text-current"
-          href="https://heroui.com"
-          title="heroui.com homepage"
-        >
-          <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
-        </Link>
-      </footer>
+    <div className="flex h-screen">
+      <aside
+        className={cn(
+          'border-r border-r-divider bg-background transition-all duration-300',
+          isSidebarExpanded ? 'w-64 overflow-y-auto' : 'w-16',
+        )}
+      >
+        dddddddd
+        {/* <SidebarNavigation isExpanded={isSidebarExpanded} /> */}
+      </aside>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Navbar />
+        <div className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+          <Outlet />
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import {heroui} from "@heroui/theme"
-import {appTheme} from './src/styles/appTheme'
+import {appTheme} from './src/presentation/styles/appTheme'
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [

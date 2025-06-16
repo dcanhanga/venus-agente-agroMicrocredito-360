@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-import { BackgroundBeam } from '@/components/molecules/backgroundBeam'
+import { BackgroundBeam } from '@/presentation/components/molecules/backgroundBeam'
 
 export function AuthLayout() {
   return (

@@ -4,7 +4,7 @@ import { Button } from '@heroui/button'
 import { Input } from '@heroui/input'
 import React from 'react'
 
-import { PasswordInput } from '@/components/molecules'
+import { PasswordInput } from '@/presentation/components/molecules'
 
 export function LoginPage() {
   const [_, setAction] = React.useState<null | string>(null)
