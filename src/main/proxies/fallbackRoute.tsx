@@ -1,7 +1,6 @@
-// routes/FallbackRoute.tsx
 import { Navigate } from 'react-router-dom'
 
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/presentation/hooks'
 
 export function FallbackRoute() {
   const isAuthenticated = useAuth()

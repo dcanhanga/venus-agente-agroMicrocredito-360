@@ -1,34 +1,30 @@
 import { Outlet } from 'react-router-dom'
 import React from 'react'
-import { cn } from '@heroui/theme'
+
+import { Sidebar } from './components'
 
 import { Navbar } from '@/presentation/components/navbar'
+import { SidebarProvider } from '@/presentation/providers'
 
 export function DefaultLayout() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(false)
+  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(true)
 
   const toggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded)
   }
 
   return (
-    <div className="flex h-screen">
-      <aside
-        className={cn(
-          'border-r border-r-divider bg-background transition-all duration-300',
-          isSidebarExpanded ? 'w-64 overflow-y-auto' : 'w-16',
-        )}
-      >
-        dddddddd
-        {/* <SidebarNavigation isExpanded={isSidebarExpanded} /> */}
-      </aside>
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Navbar />
-        <div className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-          <Outlet />
+    <SidebarProvider>
+      <div className="flex h-screen">
+        <Sidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <Navbar />
+          <div className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
 

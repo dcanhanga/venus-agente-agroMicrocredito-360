@@ -1,5 +1,5 @@
 {
-  "name": "venus-agente-agroMicrocredito-360",
+  "name": "venus-agente-agromicrocredito-360",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -33,7 +33,10 @@
     "react-dom": "18.3.1",
     "react-router-dom": "6.23.0",
     "tailwind-variants": "0.3.0",
-    "tailwindcss": "3.4.16"
+    "tailwindcss": "3.4.16",
+    "lucide-react": "0.479.0",
+    "tailwind-merge": "3.0.2"
+
   },
   "devDependencies": {
     "@eslint/compat": "1.2.8",

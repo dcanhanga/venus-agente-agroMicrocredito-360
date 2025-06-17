@@ -119,7 +119,7 @@ export const appTheme = {
         },
         focus: '#027335',
         overlay: '#000000',
-        divider: '#111111',
+        divider: '#11111126',
       },
     },
     dark: {
@@ -241,6 +241,7 @@ export const appTheme = {
         },
         focus: '#027335',
         overlay: '#ffffff',
+        divider: '#e1ffff26',
       },
     },
   },
