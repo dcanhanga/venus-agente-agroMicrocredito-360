@@ -11,8 +11,10 @@ export function DefaultLayout() {
         <Sidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
           <Navbar />
-          <div className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
-            <Outlet />
+          <div className="overflow-y-auto flex-grow">
+            <div className="max-w-screen-2xl w-full px-6  pt-16">
+              <Outlet />
+            </div>
           </div>
         </div>
       </div>
