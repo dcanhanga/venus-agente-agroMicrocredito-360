@@ -7,12 +7,6 @@ import { Navbar } from '@/presentation/components/navbar'
 import { SidebarProvider } from '@/presentation/providers'
 
 export function DefaultLayout() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = React.useState(true)
-
-  const toggleSidebar = () => {
-    setIsSidebarExpanded(!isSidebarExpanded)
-  }
-
   return (
     <SidebarProvider>
       <div className="flex h-screen">
