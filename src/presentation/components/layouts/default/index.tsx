@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom'
 
-import { Sidebar } from './components'
+import { Sidebar, Navbar } from './components'
 
-import { Navbar } from '@/presentation/components/navbar'
 import { SidebarProvider } from '@/presentation/providers'
 
 export function DefaultLayout() {

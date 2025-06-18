@@ -3,8 +3,7 @@ import { VisuallyHidden } from '@react-aria/visually-hidden'
 import { SwitchProps, useSwitch } from '@heroui/switch'
 import { useTheme } from '@heroui/use-theme'
 
-import { cn } from '../lib'
-
+import { cn } from '@/presentation/lib'
 import { IconSvgProps } from '@/types'
 
 export interface ThemeSwitchProps {
