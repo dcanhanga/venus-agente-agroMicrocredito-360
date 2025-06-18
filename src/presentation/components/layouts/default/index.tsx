@@ -12,7 +12,7 @@ export function DefaultLayout() {
         <div className="flex-1 flex flex-col overflow-hidden">
           <Navbar />
           <div className="overflow-y-auto flex-grow">
-            <div className="max-w-screen-2xl w-full px-6  pt-16">
+            <div className="max-w-screen-2xl mx-auto w-full px-6  pt-16">
               <Outlet />
             </div>
           </div>

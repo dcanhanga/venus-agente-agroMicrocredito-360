@@ -1,93 +1,47 @@
 import './Dashboard.css'
+import {
+  MetricCard,
+  LineChartRequest,
+  PieChartStatusDistribution,
+  QuickActionsCard,
+} from './components'
 export function DashboardPage() {
   return (
     <main>
-      {/* Header */}
-
-      {/* Dashboard Grid */}
+      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))] mb-4">
+        <MetricCard
+          colorClass="text-warning"
+          label="Solicitações Pendentes"
+          value={23}
+        />
+        <MetricCard
+          colorClass="text-success"
+          label="Aprovadas este Mês"
+          value={156}
+        />
+        <MetricCard
+          colorClass="text-danger"
+          label="Rejeitadas este Mês"
+          value={12}
+        />
+        <MetricCard
+          colorClass="text-primary"
+          label="Volume Total"
+          value="2.4M KZ"
+        />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+        <LineChartRequest />
+        <PieChartStatusDistribution />
+      </div>
+      <div>
+        <QuickActionsCard />
+      </div>
       <div className="dashboard-grid">
-        {/* Metric Cards */}
-        <div className="card metric-card">
-          <div className="metric-number pending">23</div>
-          <div className="metric-label">Solicitações Pendentes</div>
-        </div>
-        <div className="card metric-card">
-          <div className="metric-number approved">156</div>
-          <div className="metric-label">Aprovadas este Mês</div>
-        </div>
-        <div className="card metric-card">
-          <div className="metric-number rejected">12</div>
-          <div className="metric-label">Rejeitadas este Mês</div>
-        </div>
-        <div className="card metric-card">
-          <div className="metric-number total">R$ 2.4M</div>
-          <div className="metric-label">Volume Total</div>
-        </div>
-
-        {/* Charts */}
-        <div className="card chart-card">
-          <div className="chart-title">Solicitações por Período</div>
-          <div className="chart-placeholder">
-            [Gráfico de Linha - Tendência de Solicitações]
-          </div>
-        </div>
-        <div className="card chart-card">
-          <div className="chart-title">Distribuição por Status</div>
-          <div className="chart-placeholder">
-            [Gráfico de Pizza - % Aprovadas/Rejeitadas/Pendentes]
-          </div>
-        </div>
-
         {/* Quick Actions */}
-        <div className="card actions-card">
-          <div className="chart-title">Ações Rápidas</div>
-          <div className="action-buttons">
-            <div className="action-btn">
-              <div className="action-title">📋 Revisar Pendentes</div>
-              <div className="action-desc">
-                23 solicitações aguardando análise
-              </div>
-            </div>
-            <div className="action-btn">
-              <div className="action-title">📊 Gerar Relatório</div>
-              <div className="action-desc">Relatório mensal de performance</div>
-            </div>
-            <div className="action-btn">
-              <div className="action-title">🏛️ Nova Cooperativa</div>
-              <div className="action-desc">Cadastrar nova cooperativa</div>
-            </div>
-            <div className="action-btn">
-              <div className="action-title">⚙️ Configurações</div>
-              <div className="action-desc">Parâmetros de avaliação</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Alerts */}
-        <div className="card alerts-card">
-          <div className="chart-title">Alertas & Notificações</div>
-          <div className="alert-item alert-warning">
-            <div className="alert-title">⚠️ Atenção Requerida</div>
-            <div className="alert-text">
-              5 solicitações pendentes há mais de 3 dias
-            </div>
-          </div>
-          <div className="alert-item alert-info">
-            <div className="alert-title">📈 Performance</div>
-            <div className="alert-text">
-              Taxa de aprovação 15% acima da média
-            </div>
-          </div>
-          <div className="alert-item alert-warning">
-            <div className="alert-title">🏛️ Cooperativa em Risco</div>
-            <div className="alert-text">
-              COOP-ABC apresenta indicadores de risco elevado
-            </div>
-          </div>
-        </div>
 
         {/* Recent Activity */}
-        <div className="card activity-card">
+        {/* <div className="card activity-card">
           <div className="chart-title">Atividades Recentes</div>
           <div className="activity-list">
             {[
@@ -133,7 +87,7 @@ export function DashboardPage() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   )
