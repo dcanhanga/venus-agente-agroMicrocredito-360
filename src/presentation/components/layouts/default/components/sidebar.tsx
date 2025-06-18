@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Link, Navbar, NavbarBrand } from '@heroui/react'
+import { Button, Link, Navbar, NavbarBrand, Tooltip } from '@heroui/react'
 import { Icon } from '@iconify/react'
-import { button as buttonStyles } from '@heroui/theme'
+import { useLocation } from 'react-router-dom'
 
 import { useSidebar } from '@/presentation/hooks/use-sidebar'
 import { cn } from '@/presentation/lib'
@@ -11,27 +11,33 @@ type SideBarProps = Omit<React.ComponentProps<'aside'>, 'children'>
 
 const menuItems = [
   { icon: 'lucide:home', label: 'Dashboard', href: '/' },
-  { icon: 'lucide:users', label: 'Clientes', href: '/clientes' },
-  { icon: 'lucide:credit-card', label: 'Empréstimos', href: '/emprestimos' },
-  { icon: 'lucide:file-text', label: 'Relatórios', href: '/relatorios' },
-  { icon: 'lucide:settings', label: 'Configurações', href: '/configuracoes' },
+  { icon: 'lucide:clipboard-check', label: 'Avaliações', href: '/avaliacoes' },
+  { icon: 'lucide:history', label: 'Históricos', href: '/historicos' },
+  { icon: 'lucide:bar-chart-3', label: 'Relatórios', href: '/relatorios' },
+  { icon: 'lucide:building', label: 'Cooperativas', href: '/cooperativas' },
 ]
 
 export function Sidebar(props: SideBarProps) {
   const { className, ...rest } = props
   const { isCollapsed } = useSidebar()
+  const location = useLocation()
+  const isActive = (path: string, exact = false): boolean => {
+    if (exact) {
+      return location.pathname === path
+    }
+
+    return location.pathname.startsWith(path)
+  }
 
   return (
     <aside
       className={cn(
         'flex flex-col h-screen bg-content1 border-r border-r-divider transition-all duration-300',
-        isCollapsed ? 'w-20' : 'w-64',
+        isCollapsed ? 'w-16' : 'w-64',
         className,
       )}
       {...rest}
     >
-      {/* Replace Navbar with custom header */}
-
       <Navbar isBordered={true} maxWidth="full" position="sticky">
         <NavbarBrand className="gap-2">
           <Logo />
@@ -48,31 +54,28 @@ export function Sidebar(props: SideBarProps) {
         <ul className="space-y-2 px-3">
           {menuItems.map((item) => (
             <li key={item.href}>
-              <Link
-                aria-label={isCollapsed ? item.label : undefined}
-                className={cn(
-                  buttonStyles(),
-                  !isCollapsed && 'justify-start space-x-3',
-                  isCollapsed && 'justify-center',
-                )}
-                href={item.href}
-              >
-                <Icon aria-hidden="true" className="w-5 h-5" icon={item.icon} />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
+              <SidebarItem {...item} />
             </li>
           ))}
         </ul>
       </nav>
-      <div
-        className={cn(
-          'border-t py-2 border-divider',
-          isCollapsed ? 'px-0 ' : 'px-2',
-        )}
-      >
-        <Button fullWidth aria-label="Sair" color="danger" variant="shadow">
-          <Icon aria-hidden="true" icon="lucide:log-out" />
-          {!isCollapsed && <span className="ml-2">Sair</span>}
+      <div className={cn('border-t p-2 border-divider')}>
+        <Button
+          aria-label="Sair"
+          className={cn(!isCollapsed && 'justify-start')}
+          color="danger"
+          fullWidth={!isCollapsed}
+          isIconOnly={isCollapsed}
+          startContent={
+            <Icon
+              aria-hidden="true"
+              className="w-5 h-5"
+              icon="lucide:log-out"
+            />
+          }
+          variant="shadow"
+        >
+          {!isCollapsed && 'Sair'}
         </Button>
       </div>
     </aside>
@@ -102,3 +105,38 @@ const Logo = ({
     />
   </svg>
 )
+
+function SidebarItem({ icon, label, href }: (typeof menuItems)[0]) {
+  const { isCollapsed } = useSidebar()
+  const location = useLocation()
+  const active = location.pathname.startsWith(href)
+
+  if (isCollapsed) {
+    return (
+      <Tooltip showArrow color="primary" content={label} placement="right-end">
+        <Button
+          isIconOnly
+          as={Link}
+          color="primary"
+          href={href}
+          startContent={<Icon className="w-5 h-5" icon={icon} />}
+          variant={active ? 'shadow' : 'light'}
+        />
+      </Tooltip>
+    )
+  }
+
+  return (
+    <Button
+      fullWidth
+      as={Link}
+      className="justify-start"
+      color="primary"
+      href={href}
+      startContent={<Icon className="w-5 h-5" icon={icon} />}
+      variant={active ? 'shadow' : 'light'}
+    >
+      {label}
+    </Button>
+  )
+}
