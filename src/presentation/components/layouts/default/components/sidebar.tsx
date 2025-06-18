@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Navbar, NavbarBrand } from '@heroui/react'
+import { Button, Link, Navbar, NavbarBrand } from '@heroui/react'
 import { Icon } from '@iconify/react'
+import { button as buttonStyles } from '@heroui/theme'
 
 import { useSidebar } from '@/presentation/hooks/use-sidebar'
 import { cn } from '@/presentation/lib'
@@ -44,13 +45,13 @@ export function Sidebar(props: SideBarProps) {
         </NavbarBrand>
       </Navbar>
       <nav aria-label="Main Navigation" className="flex-1 overflow-y-auto py-2">
-        {/* <ul className="space-y-2 px-3">
+        <ul className="space-y-2 px-3">
           {menuItems.map((item) => (
             <li key={item.href}>
               <Link
                 aria-label={isCollapsed ? item.label : undefined}
                 className={cn(
-                  'flex items-center p-2 rounded-md text-foreground-600 hover:bg-content2 hover:text-foreground-900 transition-colors',
+                  buttonStyles(),
                   !isCollapsed && 'justify-start space-x-3',
                   isCollapsed && 'justify-center',
                 )}
@@ -61,7 +62,7 @@ export function Sidebar(props: SideBarProps) {
               </Link>
             </li>
           ))}
-        </ul> */}
+        </ul>
       </nav>
       <div
         className={cn(

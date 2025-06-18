@@ -1,6 +1,5 @@
 import type { NavigateOptions } from 'react-router-dom'
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ToastProvider } from '@heroui/react'
 import { HeroUIProvider } from '@heroui/system'
 import { useHref, useNavigate } from 'react-router-dom'
@@ -16,10 +15,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <HeroUIProvider navigate={navigate} useHref={useHref}>
-      <NextThemesProvider attribute="class" enableSystem={true}>
-        <ToastProvider />
-        {children}
-      </NextThemesProvider>
+      <ToastProvider />
+      {children}
     </HeroUIProvider>
   )
 }
