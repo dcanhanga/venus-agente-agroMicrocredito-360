@@ -11,7 +11,10 @@ type SideBarItemProps = {
 export function SidebarItem({ icon, label, href }: SideBarItemProps) {
   const { isCollapsed } = useSidebar()
   const location = useLocation()
-  const active = location.pathname.startsWith(href)
+  const active =
+    href === '/'
+      ? location.pathname === '/'
+      : location.pathname.startsWith(href)
 
   if (isCollapsed) {
     return (

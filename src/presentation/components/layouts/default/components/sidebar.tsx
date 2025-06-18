@@ -12,10 +12,14 @@ type SideBarProps = Omit<React.ComponentProps<'aside'>, 'children'>
 
 const menuItems = [
   { icon: 'lucide:home', label: 'Dashboard', href: '/' },
-  { icon: 'lucide:clipboard-check', label: 'Avaliações', href: '/avaliacoes' },
-  { icon: 'lucide:history', label: 'Históricos', href: '/historicos' },
-  { icon: 'lucide:bar-chart-3', label: 'Relatórios', href: '/relatorios' },
-  { icon: 'lucide:building', label: 'Cooperativas', href: '/cooperativas' },
+  {
+    icon: 'lucide:clipboard-check',
+    label: 'Avaliações',
+    href: '/reviews',
+  },
+  { icon: 'lucide:history', label: 'Históricos', href: '/history' },
+  { icon: 'lucide:bar-chart-3', label: 'Relatórios', href: '/reports' },
+  { icon: 'lucide:building', label: 'Cooperativas', href: '/cooperatives' },
 ]
 
 export function Sidebar(props: SideBarProps) {
@@ -25,7 +29,7 @@ export function Sidebar(props: SideBarProps) {
   return (
     <aside
       className={cn(
-        'flex flex-col h-screen bg-content1 border-r border-r-divider transition-all duration-300',
+        'flex flex-col h-screen bg-content1  border-r border-r-divider transition-width duration-300',
         isCollapsed ? 'w-16' : 'w-64',
         className,
       )}
