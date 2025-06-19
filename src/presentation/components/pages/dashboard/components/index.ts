@@ -1,5 +1,2 @@
-export * from './metricCard'
-export * from './lineChartRequests'
-export * from './pieChartStatusDistribution'
-export * from './quickActionsCard'
-export * from './recentActivitiesTable'
+export * from './metricsSection'
+export * from './analyticsSection'

@@ -10,6 +10,8 @@ import {
 
 import { ChartCard } from './chartCard'
 
+import { appTheme } from '@/presentation/styles/appTheme'
+
 const data = [
   { mes: 'Jan', total: 40 },
   { mes: 'Fev', total: 55 },
@@ -20,7 +22,11 @@ const data = [
 ]
 
 export const LineChartRequest = () => (
-  <ChartCard title="Solicitações por Período">
+  <ChartCard
+    aria-labelledby="grafico-linha"
+    role="region"
+    title="Solicitações por Período"
+  >
     <ResponsiveContainer height="100%" width="100%">
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
@@ -30,7 +36,7 @@ export const LineChartRequest = () => (
         <Line
           dataKey="total"
           dot={{ r: 5 }}
-          stroke="#3b82f6"
+          stroke={appTheme.themes.dark.colors.secondary.DEFAULT}
           strokeWidth={3}
           type="monotone"
         />

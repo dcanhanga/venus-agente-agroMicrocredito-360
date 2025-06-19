@@ -11,6 +11,7 @@ type MetricCardProps = {
     | 'text-secondary'
     | 'text-warning'
     | 'text-success'
+  ariaLabel?: string
 }
 
 export function MetricCard(props: MetricCardProps) {

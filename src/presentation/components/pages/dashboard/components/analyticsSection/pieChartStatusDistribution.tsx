@@ -24,7 +24,11 @@ const COLORS = [
 ]
 
 export const PieChartStatusDistribution = () => (
-  <ChartCard title="Distribuição por Status">
+  <ChartCard
+    aria-labelledby="grafico-pizza"
+    role="region"
+    title="Distribuição por Status"
+  >
     <ResponsiveContainer height="100%" width="100%">
       <PieChart>
         <Pie label data={data} dataKey="value" nameKey="name" outerRadius={100}>
