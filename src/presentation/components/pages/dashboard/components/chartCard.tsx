@@ -16,11 +16,9 @@ export function ChartCard(props: ChartCardProps) {
       className="border border-divider shadow-sm hover:shadow-md transition-shadow duration-300"
     >
       <CardHeader>
-        <h3 className="text-lg font-semibold mb-4 text-default-900">{title}</h3>
+        <h3 className="text-lg font-semibold  text-foreground-400">{title}</h3>
       </CardHeader>
-      <CardBody>
-        <div className="h-80">{children}</div>
-      </CardBody>
+      <CardBody className="h-80">{children}</CardBody>
     </Card>
   )
 }

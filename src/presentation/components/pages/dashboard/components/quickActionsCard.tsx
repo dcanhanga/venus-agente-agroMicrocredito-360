@@ -1,12 +1,21 @@
+import { Card, CardBody, CardHeader } from '@heroui/react'
+
 import { QuickActionItem } from './quickActionItem'
 
 export const QuickActionsCard = () => {
   return (
-    <div className="bg-white rounded-2xl shadow p-4 w-full">
-      <h3 className="text-lg font-semibold mb-4 text-gray-700">
-        Ações Rápidas
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <Card
+      isHoverable
+      as="section"
+      className="border border-divider shadow-sm hover:shadow-md transition-shadow duration-300 "
+    >
+      <CardHeader>
+        <h3 className="text-lg font-semibold text-foreground-400">
+          Ações Rápidas
+        </h3>
+      </CardHeader>
+
+      <CardBody className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <QuickActionItem
           description="23 solicitações aguardando análise"
           //href="/solicitacoes/pendentes"
@@ -31,7 +40,7 @@ export const QuickActionsCard = () => {
           icon="⚙️"
           title="Configurações"
         />
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   )
 }

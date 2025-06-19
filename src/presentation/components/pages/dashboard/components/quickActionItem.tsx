@@ -1,3 +1,5 @@
+import { Card, CardBody, CardHeader } from '@heroui/react'
+
 type QuickActionItemProps = {
   title: string
   description: string
@@ -8,11 +10,13 @@ export function QuickActionItem(props: QuickActionItemProps) {
   const { title, description, icon } = props
 
   return (
-    <div className="p-4 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition cursor-pointer">
-      <div className="text-lg font-semibold text-gray-800">
-        {icon} {title}
-      </div>
-      <div className="text-sm text-gray-500 mt-1">{description}</div>
-    </div>
+    <Card isPressable as="article" className="border border-divider">
+      <CardHeader>
+        <h4 className="text-lg font-semibold text-foreground-400">
+          {icon} {title}
+        </h4>
+      </CardHeader>
+      <CardBody className="text-sm text-foreground-400">{description}</CardBody>
+    </Card>
   )
 }
