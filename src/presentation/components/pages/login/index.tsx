@@ -1,88 +1,157 @@
-import { Card, CardBody, CardHeader, cn } from '@heroui/react'
-import { Form } from '@heroui/form'
-import { Button } from '@heroui/button'
-import { Input } from '@heroui/input'
-import React from 'react'
-
-import { PasswordInput } from '@/presentation/components/molecules'
-
+import { useState } from 'react'
+import { Input, Button, Card, CardBody } from '@heroui/react'
+import { useAuth } from '../../../providers/authContext'
+import { toast } from 'react-toastify'
 export function LoginPage() {
-  const [_, setAction] = React.useState<null | string>(null)
+  const [email, setEmail] = useState('')
+  const [password, setpassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [erro, setErro] = useState('')
+  const [success, setsuccess] = useState('')
 
-  const [isLoading, startTransition] = React.useTransition()
+  const { signIn } = useAuth()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    // const formData = new FormData(e.currentTarget)
-
-    startTransition(() => {
-      // const response = await loginAction(formData)
-      // if (!'response.success') {
-      //   addToast({
-      //     color: 'danger',
-      //     description: 'response.message',
-      //     shouldShowTimeoutProgress: true,
-      //     variant: 'bordered',
-      //   })
-      // }
-    })
+  const handleLogin = async (e: any) => {
+    try {
+      e.preventDefault()
+      setErro('')
+      setsuccess('')
+      setLoading(true)
+      await signIn(email, password)
+      toast.success('login feito com sucesso')
+    } catch (error: any) {
+      console.log(error)
+      toast.error(error.message)
+    }
+    setLoading(false)
   }
 
   return (
-    <main className="flex items-center justify-center w-full h-dvh bg-muted">
-      <Card className="max-w-md w-full shadow-xl">
-        <CardHeader as="header" className="flex-col gap-2">
-          <h1 className="text-2xl font-bold text-center">Login</h1>
-          <p className="text-sm text-muted-foreground text-center">
-            Acesse sua conta institucional
-          </p>
-        </CardHeader>
+    <div className="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-emerald-500 to-green-900">
+      <Card className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl">
+        <CardBody className="p-8">
+          {/* Logo */}
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold bg-gradient-to-br from-emerald-500 to-green-900 bg-clip-text text-transparent">
+              VENUS
+            </h1>
+          </div>
 
-        <CardBody>
-          <Form
-            className={cn('w-full  mx-auto h-ful  space-y-10')}
-            onReset={() => setAction('reset')}
-            onSubmit={handleSubmit}
-          >
-            <Input
-              isRequired
-              color="primary"
-              errorMessage="Please enter a valid email"
-              label="email"
-              labelPlacement="outside"
-              name="email"
-              placeholder="Enter your email"
-              type="text"
-              variant="faded"
-            />
-            <PasswordInput
-              isRequired
-              color="primary"
-              errorMessage="Please enter a valid password"
-              label="Password"
-              labelPlacement="outside"
-              name="password"
-              placeholder="Enter your password"
-              variant="faded"
-            />
-            <div className="flex gap-2 mt-4 w-full  flex-col">
-              <Button
-                fullWidth
-                color="primary"
-                isLoading={isLoading}
-                type="submit"
-                variant="shadow"
-              >
-                Submit
-              </Button>
-              <Button fullWidth isDisabled={isLoading} type="reset">
-                Reset
-              </Button>
+          {/* Texto de boas-vindas */}
+          <p className="text-center text-gray-600 mb-6">
+            Bem-vindo de volta! Faça login em sua conta.
+          </p>
+
+          {/* Mensagens */}
+          {erro && (
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg border-l-4 border-red-600 mb-4">
+              {erro}
             </div>
-          </Form>
+          )}
+          {success && (
+            <div className="bg-green-50 text-green-600 p-3 rounded-lg border-l-4 border-green-600 mb-4">
+              {success}
+            </div>
+          )}
+
+          {/* Formulário */}
+          <form onSubmit={handleLogin} className="space-y-5">
+            <Input
+              label="Email"
+              type="email"
+              placeholder="Digite seu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              variant="bordered"
+            />
+
+            <Input
+              label="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Digite sua password"
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
+              required
+              variant="bordered"
+              endContent={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-500 hover:text-emerald-500"
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              }
+            />
+
+            {/* Esqueceu password */}
+            <div className="text-right">
+              <button
+                type="button"
+                className="text-emerald-500 hover:underline text-sm"
+                onClick={() => alert('Recuperação de password em breve!')}
+              >
+                Esqueceu sua password?
+              </button>
+            </div>
+
+            {/* Botão login */}
+            <Button
+              type="submit"
+              color="primary"
+              className="w-full bg-gradient-to-br from-emerald-500 to-green-900 text-white font-semibold rounded-xl"
+              isLoading={loading}
+            >
+              Entrar
+            </Button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 h-px bg-gray-200"></div>
+            <span className="px-4 text-gray-500 text-sm">ou continue com</span>
+            <div className="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          {/* Social login */}
+          <div className="flex gap-4 mb-4">
+            <button
+              onClick={() => {}}
+              className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-red-500"
+              title="Entrar com Google"
+            >
+              🔴
+            </button>
+            <button
+              onClick={() => {}}
+              className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-blue-600"
+              title="Entrar com Facebook"
+            >
+              🔵
+            </button>
+            <button
+              onClick={() => {}}
+              className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-black"
+              title="Entrar com Apple"
+            >
+              ⚫
+            </button>
+          </div>
+
+          {/* Link cadastro */}
+          <p className="text-center text-gray-600 text-sm">
+            Não tem uma conta?{' '}
+            <button
+              onClick={() => alert('Cadastro em breve!')}
+              className="text-emerald-500 font-semibold hover:underline"
+            >
+              Cadastre-se aqui
+            </button>
+          </p>
         </CardBody>
       </Card>
-    </main>
+    </div>
   )
 }

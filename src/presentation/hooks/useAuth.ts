@@ -3,5 +3,5 @@
 export function useAuth() {
   // const token = Cookies.get('token')
 
-  return true
+  return false
 }
