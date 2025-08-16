@@ -91,4 +91,6 @@ export interface IHistoryAnalysis {
   request: IRequest
   lastReview: ILastEvaluation
   requester: IApplicant
+  riskAnalysis: IRiskAnalysis | undefined
+  guarantees: string
 }

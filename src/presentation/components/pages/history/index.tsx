@@ -22,10 +22,10 @@ import { getAvaliations } from '@/services/call'
 import { IHistoryAnalysis } from '@/types'
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [selectedId, setSelectedId] = useState(null)
+  const [selectedId, setSelectedId] = useState<number | undefined>()
   const [history, setHistory] = useState<IHistoryAnalysis[]>([])
 
-  const abrirModal = (id: any) => {
+  const abrirModal = (id: number) => {
     setSelectedId(id)
     onOpen()
   }
@@ -37,7 +37,6 @@ export function HistoryPage() {
       })
 
       setHistory(transformevaluationToHistory(data))
-      toast.success('Histórico trazidos com sucesso')
     } catch (error: any) {
       toast.error(error)
     }
@@ -148,11 +147,11 @@ export function HistoryPage() {
               </tr>
             </thead>
             <tbody>
-              {history.map((hist) => (
+              {history.map((hist, i) => (
                 <tr className="hover:bg-gray-50">
                   <td
                     className="p-3 text-blue-600 font-semibold cursor-pointer"
-                    onClick={() => abrirModal('#2024-0155')}
+                    onClick={() => abrirModal(i)}
                   >
                     # {hist.request.id}
                   </td>
@@ -161,7 +160,13 @@ export function HistoryPage() {
                     KZ {hist.request.valorSolicitado}
                   </td>
                   <td className="p-3">
-                    <Chip color="success" size="sm" variant="flat">
+                    <Chip
+                      color={
+                        hist.request.status == 'APROVADA' ? 'success' : 'danger'
+                      }
+                      size="sm"
+                      variant="flat"
+                    >
                       {hist.request.status}
                     </Chip>
                   </td>
@@ -177,7 +182,7 @@ export function HistoryPage() {
                       isIconOnly
                       size="sm"
                       variant="flat"
-                      onPress={() => abrirModal('#2024-0155')}
+                      onPress={() => abrirModal(i)}
                     >
                       👁️
                     </Button>
@@ -207,46 +212,60 @@ export function HistoryPage() {
           {(onClose) => (
             <>
               <ModalHeader className="font-bold">
-                Detalhes da Solicitação {selectedId}
+                Detalhes da Solicitação
               </ModalHeader>
               <ModalBody>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2">
-                      Informações da Solicitação
-                    </h4>
-                    <p>
-                      <b>ID:</b> #2024-0155
-                    </p>
-                    <p>
-                      <b>Valor:</b> R$ 120.000
-                    </p>
-                    <p>
-                      <b>Prazo:</b> 36 meses
-                    </p>
-                    <p>
-                      <b>Finalidade:</b> Equipamentos
-                    </p>
-                    <p>
-                      <b>Garantia:</b> Imóvel Rural
-                    </p>
+                {selectedId != undefined && history[selectedId] ? (
+                  (() => {
+                    const item = history[selectedId]
+
+                    return (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <h4 className="font-semibold mb-2">
+                            Informações da Solicitação
+                          </h4>
+                          <p>
+                            <b>ID:</b> # {item.request.id}
+                          </p>
+                          <p>
+                            <b>Valor:</b> KZ {item.request.valorSolicitado}
+                          </p>
+                          <p>
+                            <b>Data Solicitação:</b>{' '}
+                            {item.request.dataSolicitacao}
+                          </p>
+                          <p>
+                            <b>Finalidade:</b> {item.request.finalidadeCredito}
+                          </p>
+                          <p>
+                            <b>Garantia:</b> {item.guarantees}
+                          </p>
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <h4 className="font-semibold mb-2">
+                            Dados da Cooperativa
+                          </h4>
+                          <p>
+                            <b>Nome:</b> {item.cooperative.nome}
+                          </p>
+                          <p>
+                            <b>CNPJ:</b> {item.cooperative.nif}
+                          </p>
+                          <p>
+                            <b>Score de Risco:</b>{' '}
+                            {item.riskAnalysis?.score ?? '---'}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })()
+                ) : (
+                  <div className="flex items-center justify-center h-40 text-gray-400">
+                    <HiOutlineInformationCircle size={48} />
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2">Dados da Cooperativa</h4>
-                    <p>
-                      <b>Nome:</b> Cooperativa Agro Sul
-                    </p>
-                    <p>
-                      <b>CNPJ:</b> 12.345.678/0001-90
-                    </p>
-                    <p>
-                      <b>Cooperados:</b> 1.247
-                    </p>
-                    <p>
-                      <b>Score de Risco:</b> 6.8 (Baixo)
-                    </p>
-                  </div>
-                </div>
+                )}
               </ModalBody>
               <ModalFooter>
                 <Button color="secondary" onPress={onClose}>

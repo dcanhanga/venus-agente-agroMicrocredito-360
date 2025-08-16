@@ -13,7 +13,6 @@ export function transformevaluationToHistory(evaluations: ICreditAnalysis[]) {
     const requester = evaluation.solicitante
     const cooperative = evaluation.cooperativa
     const lastReview = evaluation.ultimaAvaliacao
-
     return {
       request,
       cooperative,
