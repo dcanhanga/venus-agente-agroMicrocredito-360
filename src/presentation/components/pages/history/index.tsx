@@ -36,7 +36,6 @@ export function HistoryPage() {
         statusSolicitacao: 'HISTORY',
       })
       setHistory(transformevaluationToHistory(data))
-      toast.success('Histórico trazidos com sucesso')
     } catch (error: any) {
       toast.error(error)
     }
