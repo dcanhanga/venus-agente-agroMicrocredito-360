@@ -20,6 +20,7 @@ import { toast } from 'react-toastify'
 import { transformevaluationToHistory } from '@/presentation/lib'
 import { getAvaliations } from '@/services/call'
 import { IHistoryAnalysis } from '@/types'
+import { HiOutlineInformationCircle } from 'react-icons/hi'
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedId, setSelectedId] = useState<number | undefined>()

@@ -13,11 +13,15 @@ export function transformevaluationToHistory(evaluations: ICreditAnalysis[]) {
     const requester = evaluation.solicitante
     const cooperative = evaluation.cooperativa
     const lastReview = evaluation.ultimaAvaliacao
+    const guarantees = evaluation.garantias.map((g) => g.descricao).join(',')
+    const riskAnalysis = evaluation?.analisesRisco[0]
     return {
       request,
       cooperative,
       lastReview,
       requester,
+      guarantees,
+      riskAnalysis,
     }
   })
 }
