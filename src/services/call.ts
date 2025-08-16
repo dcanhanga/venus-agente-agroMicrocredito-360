@@ -77,133 +77,11 @@ const addUser = async (data: any) => {
     throw new Error(error.erro[0])
   }
 }
-const getUsers = async () => {
+const getUsers = async (params: any) => {
   try {
-    const users = [
-      {
-        id: 4,
-        email: 'user4@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 5,
-        email: 'user5@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 6,
-        email: 'user6@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 7,
-        email: 'user7@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 8,
-        email: 'user8@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 9,
-        email: 'user9@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 10,
-        email: 'user10@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 11,
-        email: 'user11@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 12,
-        email: 'user12@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 13,
-        email: 'user13@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-      {
-        id: 14,
-        email: 'user14@dev.ao',
-        dataCriacao: '2025-08-15 04:26:13',
-        dataAtualizacao: '2025-08-15 04:26:13',
-        modificadoPorNome: null,
-        idCooperativa: null,
-        idMembro: null,
-        password: '1234567',
-        tipo_utilizador: 'COOPERATIVA',
-      },
-    ]
-    return users
-    const response = await api.get('/api/utilizadores/sign-up')
+    const response = await api.get('/api/utilizadores/unsed/user', {
+      params,
+    })
     return response.data.dados
   } catch (responseError: any) {
     const error = responseError.response.data
@@ -230,6 +108,16 @@ const addCooperativaUtilizador = async (data: any) => {
   }
 }
 
+const getAvaliations = async () => {
+  try {
+    const response = await api.get('/api/solicitacoes-micro-credito/historico')
+    return response.data.dados
+  } catch (responseError: any) {
+    const error = responseError.response.data
+    throw new Error(error.erro[0])
+  }
+}
+
 export {
   login,
   addCooperative,
@@ -242,4 +130,5 @@ export {
   deleteUser,
   getUsers,
   addCooperativaUtilizador,
+  getAvaliations,
 }

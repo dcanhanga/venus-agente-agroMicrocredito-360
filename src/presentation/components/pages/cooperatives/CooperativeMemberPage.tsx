@@ -30,7 +30,9 @@ export function CooperativaUtilizadorPage() {
     try {
       const coopData = await getCooperatives()
       setCooperativas(coopData)
-      const usersData = await getUsers()
+      const usersData = await getUsers({
+        estado: false,
+      })
       setUsers(usersData)
     } catch (error) {
       toast.error('Erro ao carregar dados para o formulário')

@@ -9,10 +9,10 @@ export function CooperativesTab() {
     <>
       <Tabs>
         <TabList>
-          <Tab>Cooporativos</Tab>
+          <Tab>Cooperativas</Tab>
           <Tab>Instituições Financeiras</Tab>
           <Tab>Utilizadores</Tab>
-          <Tab>Membros da Cooporativa</Tab>
+          <Tab>Membros da Cooperativa</Tab>
         </TabList>
 
         <TabPanel>

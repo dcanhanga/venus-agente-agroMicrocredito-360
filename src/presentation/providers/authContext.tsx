@@ -12,7 +12,7 @@ import { toast } from 'react-toastify'
 interface IUser {
   id: number
   email: string
-  tipoUtilizador: string
+  tipo_utilizador: string
   dataCriacao: string
   dataAtualizacao: string
   modificadoPorNome: string | null

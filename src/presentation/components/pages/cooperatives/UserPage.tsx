@@ -7,11 +7,7 @@ import {
   SelectItem,
 } from '@heroui/react'
 import { useState, useEffect } from 'react'
-import {
-  addUser,
-  deleteUser,
-  getUsers,
-} from '../../../../services/call'
+import { addUser, deleteUser, getUsers } from '../../../../services/call'
 import { toast } from 'react-toastify'
 
 export function UsersPage() {
@@ -34,7 +30,9 @@ export function UsersPage() {
 
   const carregarUsers = async () => {
     try {
-      const data = await getUsers()
+      const data = await getUsers({
+        estado: false,
+      })
       setUsers(data)
     } catch (error) {
       toast.error('Erro ao carregar utilizadores')
@@ -81,9 +79,7 @@ export function UsersPage() {
       {/* Formulário */}
       <Card className="mb-8">
         <CardBody>
-          <h2 className="text-lg font-bold mb-5">
-            Cadastrar Novo Utilizador
-          </h2>
+          <h2 className="text-lg font-bold mb-5">Cadastrar Novo Utilizador</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
             <Input
               label="Email"
@@ -120,11 +116,7 @@ export function UsersPage() {
             >
               Limpar
             </Button>
-            <Button
-              color="primary"
-              onPress={cadastrarUser}
-              isLoading={loading}
-            >
+            <Button color="primary" onPress={cadastrarUser} isLoading={loading}>
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
           </div>

@@ -10,9 +10,11 @@ import { PanelRight } from 'lucide-react'
 import { useSidebar } from '../../../../hooks/use-sidebar'
 
 import { ThemeSwitch } from './theme-switch'
+import { useAuth } from '@/presentation/providers/authContext'
 
 export const Navbar = () => {
   const { toggleSidebar, isCollapsed } = useSidebar()
+  const { user } = useAuth()
 
   return (
     <HeroUINavbar isBordered={true} maxWidth="full" position="sticky">
@@ -43,7 +45,11 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <span>dropdown account</span>
+          {user != null && (
+            <span>
+              {user.tipo_utilizador} - {user.email}
+            </span>
+          )}
         </NavbarMenuItem>
       </NavbarContent>
     </HeroUINavbar>
