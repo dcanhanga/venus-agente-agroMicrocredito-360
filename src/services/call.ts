@@ -108,9 +108,14 @@ const addCooperativaUtilizador = async (data: any) => {
   }
 }
 
-const getAvaliations = async () => {
+const getAvaliations = async (params: any) => {
   try {
-    const response = await api.get('/api/solicitacoes-micro-credito/historico')
+    const response = await api.get(
+      '/api/solicitacoes-micro-credito/historico',
+      {
+        params,
+      },
+    )
     return response.data.dados
   } catch (responseError: any) {
     const error = responseError.response.data

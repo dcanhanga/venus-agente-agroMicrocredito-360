@@ -85,3 +85,10 @@ export interface ICreditAnalysis {
   ultimaAvaliacao: ILastEvaluation
   membrosCooperativa: ICooperativeMember[]
 }
+
+export interface IHistoryAnalysis {
+  cooperative: ICooperative
+  request: IRequest
+  lastReview: ILastEvaluation
+  requester: IApplicant
+}

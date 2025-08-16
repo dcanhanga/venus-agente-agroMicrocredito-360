@@ -1,3 +1,6 @@
+import { transformevaluationToHistory } from '@/presentation/lib'
+import { getAvaliations } from '@/services/call'
+import { ICreditAnalysis, IHistoryAnalysis } from '@/types'
 import {
   Button,
   Input,
@@ -14,15 +17,31 @@ import {
   Card,
   CardBody,
 } from '@heroui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedId, setSelectedId] = useState(null)
+  const [history, setHistory] = useState<IHistoryAnalysis[]>([])
 
   const abrirModal = (id: any) => {
     setSelectedId(id)
     onOpen()
   }
+  async function fetchHistory() {
+    try {
+      const data = await getAvaliations({
+        statusSolicitacao: 'HISTORY',
+      })
+      setHistory(transformevaluationToHistory(data))
+      toast.success('Histórico trazidos com sucesso')
+    } catch (error: any) {
+      toast.error(error)
+    }
+  }
+  useEffect(() => {
+    fetchHistory()
+  }, [])
   return (
     <div className="max-w-[1400px] mx-auto p-5 space-y-6">
       {/* Page Header */}
@@ -31,7 +50,7 @@ export function HistoryPage() {
           <h1 className="text-2xl font-bold text-gray-800 mb-4">
             Histórico de Decisões
           </h1>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="bg-gray-50 p-4 rounded-lg text-center border">
               <div className="text-2xl font-bold text-green-600">1,247</div>
               <div className="text-sm text-gray-500">Total Aprovadas</div>
@@ -43,10 +62,6 @@ export function HistoryPage() {
             <div className="bg-gray-50 p-4 rounded-lg text-center border">
               <div className="text-2xl font-bold text-blue-600">R$ 45.2M</div>
               <div className="text-sm text-gray-500">Volume Total</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg text-center border">
-              <div className="text-2xl font-bold text-purple-600">2.3 dias</div>
-              <div className="text-sm text-gray-500">Tempo Médio</div>
             </div>
           </div>
         </CardBody>
@@ -78,23 +93,7 @@ export function HistoryPage() {
 
             <Input label="Data Inicial" type="date" defaultValue="2024-01-01" />
             <Input label="Data Final" type="date" defaultValue="2024-06-15" />
-
-            <Select label="Analista">
-              <SelectItem>Todos</SelectItem>
-              <SelectItem>João Silva</SelectItem>
-              <SelectItem>Maria Santos</SelectItem>
-              <SelectItem>Carlos Lima</SelectItem>
-              <SelectItem>Ana Costa</SelectItem>
-            </Select>
-
             <Input label="Valor Mínimo" type="number" placeholder="R$ 0" />
-          </div>
-
-          <div className="flex flex-col md:flex-row gap-3">
-            <Input
-              className="flex-1"
-              placeholder="Buscar por ID, cooperativa ou observações..."
-            />
             <Button color="primary" startContent="🔍">
               Buscar
             </Button>
@@ -134,7 +133,7 @@ export function HistoryPage() {
                   Data Decisão
                 </th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Analista
+                  Solicitante
                 </th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">
                   Tempo Análise
@@ -145,37 +144,42 @@ export function HistoryPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="hover:bg-gray-50">
-                <td
-                  className="p-3 text-blue-600 font-semibold cursor-pointer"
-                  onClick={() => abrirModal('#2024-0155')}
-                >
-                  #2024-0155
-                </td>
-                <td className="p-3">Cooperativa Agro Sul</td>
-                <td className="p-3 font-semibold text-green-600">R$ 120.000</td>
-                <td className="p-3">
-                  <Chip color="success" size="sm" variant="flat">
-                    Aprovada
-                  </Chip>
-                </td>
-                <td className="p-3 text-sm text-gray-500">14/06/2024 16:45</td>
-                <td className="p-3 text-sm text-gray-500">João Silva</td>
-                <td className="p-3">6 horas</td>
-                <td className="p-3 flex gap-2">
-                  <Button
-                    isIconOnly
-                    size="sm"
-                    variant="flat"
-                    onPress={() => abrirModal('#2024-0155')}
+              {history.map((hist) => (
+                <tr className="hover:bg-gray-50">
+                  <td
+                    className="p-3 text-blue-600 font-semibold cursor-pointer"
+                    onClick={() => abrirModal('#2024-0155')}
                   >
-                    👁️
-                  </Button>
-                  <Button isIconOnly size="sm" variant="flat">
-                    📝
-                  </Button>
-                </td>
-              </tr>
+                    # {hist.request.id}
+                  </td>
+                  <td className="p-3"> {hist.cooperative.nome}</td>
+                  <td className="p-3 font-semibold text-green-600">
+                    KZ {hist.request.valorSolicitado}
+                  </td>
+                  <td className="p-3">
+                    <Chip color="success" size="sm" variant="flat">
+                      {hist.request.status}
+                    </Chip>
+                  </td>
+                  <td className="p-3 text-sm text-gray-500">
+                    {hist.request.dataSolicitacao}
+                  </td>
+                  <td className="p-3 text-sm text-gray-500">
+                    {hist.requester.email}
+                  </td>
+                  <td className="p-3">6 horas</td>
+                  <td className="p-3 flex gap-2">
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="flat"
+                      onPress={() => abrirModal('#2024-0155')}
+                    >
+                      👁️
+                    </Button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 

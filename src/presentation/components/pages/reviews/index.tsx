@@ -39,7 +39,9 @@ export function ReviewsPage() {
 
   async function fetchGuarantees() {
     try {
-      const data = await getAvaliations()
+      const data = await getAvaliations({
+        statusSolicitacao: 'REJEITADA',
+      })
       setEvaluation(data)
       setFilteredEvaluation(data)
     } catch (error: any) {
