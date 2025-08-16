@@ -6,8 +6,9 @@ import '@/presentation/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-tabs/style/react-tabs.css'
 
-import { App } from './App'
 import { ToastContainer } from 'react-toastify'
+
+import { App } from './App'
 
 import { AppProvider } from '@/presentation/providers'
 import { AuthProvider } from '@/presentation/providers/authContext'

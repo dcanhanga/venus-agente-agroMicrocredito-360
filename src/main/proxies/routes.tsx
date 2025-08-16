@@ -35,4 +35,5 @@ const MainRoute = () => {
     </>
   )
 }
+
 export { MainRoute }

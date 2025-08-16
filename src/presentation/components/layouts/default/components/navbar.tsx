@@ -10,6 +10,7 @@ import { PanelRight } from 'lucide-react'
 import { useSidebar } from '../../../../hooks/use-sidebar'
 
 import { ThemeSwitch } from './theme-switch'
+
 import { useAuth } from '@/presentation/providers/authContext'
 
 export const Navbar = () => {

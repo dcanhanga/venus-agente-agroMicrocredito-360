@@ -24,8 +24,8 @@ export function ReportsPage() {
               <SelectItem key="custom">Personalizado</SelectItem>
             </Select>
 
-            <Input type="date" label="Data Inicial" />
-            <Input type="date" label="Data Final" />
+            <Input label="Data Inicial" type="date" />
+            <Input label="Data Final" type="date" />
 
             <Select label="Categoria" placeholder="Selecione">
               <SelectItem key="all">Todas as categorias</SelectItem>
@@ -37,7 +37,7 @@ export function ReportsPage() {
           </div>
 
           <div className="flex justify-end gap-4">
-            <Button variant="flat" color="default">
+            <Button color="default" variant="flat">
               Limpar Filtros
             </Button>
             <Button color="primary">Aplicar Filtros</Button>
@@ -94,10 +94,10 @@ export function ReportsPage() {
                 <h3 className="font-bold text-gray-800 mb-2">{report.title}</h3>
                 <p className="text-gray-500 text-sm mb-4">{report.desc}</p>
                 <div className="flex gap-3">
-                  <Button size="sm" color="success">
+                  <Button color="success" size="sm">
                     Visualizar
                   </Button>
-                  <Button size="sm" color="warning">
+                  <Button color="warning" size="sm">
                     Exportar
                   </Button>
                 </div>
@@ -167,9 +167,9 @@ export function ReportsPage() {
             ].map((opt, idx) => (
               <Button
                 key={idx}
-                variant="bordered"
-                startContent={opt.icon}
                 className="font-bold"
+                startContent={opt.icon}
+                variant="bordered"
               >
                 {opt.text}
               </Button>

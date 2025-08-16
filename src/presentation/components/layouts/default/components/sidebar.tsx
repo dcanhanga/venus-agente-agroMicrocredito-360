@@ -7,24 +7,38 @@ import { SidebarItem } from './sidebarItem'
 
 import { useSidebar } from '@/presentation/hooks/use-sidebar'
 import { cn } from '@/presentation/lib'
+import { useAuth } from '@/presentation/providers/authContext'
+import { tipo_utilizador } from '@/constants'
 
 type SideBarProps = Omit<React.ComponentProps<'aside'>, 'children'>
-
-const menuItems = [
-  { icon: 'lucide:home', label: 'Dashboard', href: '/' },
-  {
-    icon: 'lucide:clipboard-check',
-    label: 'Avaliações',
-    href: '/reviews',
-  },
-  { icon: 'lucide:history', label: 'Históricos', href: '/history' },
-  { icon: 'lucide:bar-chart-3', label: 'Relatórios', href: '/reports' },
-  { icon: 'lucide:building', label: 'Cooperativas', href: '/cooperatives' },
-]
 
 export function Sidebar(props: SideBarProps) {
   const { className, ...rest } = props
   const { isCollapsed } = useSidebar()
+  const { user } = useAuth()
+  const menuItems = React.useMemo(() => {
+    if (!user) return []
+    if (user.tipo_utilizador === tipo_utilizador.ADMIN) {
+      return [
+        { icon: 'lucide:bar-chart-3', label: 'Relatórios', href: '/reports' },
+        {
+          icon: 'lucide:building',
+          label: 'Cooperativas',
+          href: '/cooperatives',
+        },
+      ]
+    }
+
+    return [
+      { icon: 'lucide:home', label: 'Dashboard', href: '/' },
+      {
+        icon: 'lucide:clipboard-check',
+        label: 'Avaliações',
+        href: '/reviews',
+      },
+      { icon: 'lucide:history', label: 'Históricos', href: '/history' },
+    ]
+  }, [user])
 
   return (
     <aside
