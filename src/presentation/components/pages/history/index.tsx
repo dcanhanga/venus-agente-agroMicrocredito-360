@@ -1,6 +1,3 @@
-import { transformevaluationToHistory } from '@/presentation/lib'
-import { getAvaliations } from '@/services/call'
-import { ICreditAnalysis, IHistoryAnalysis } from '@/types'
 import {
   Button,
   Input,
@@ -19,6 +16,10 @@ import {
 } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+
+import { transformevaluationToHistory } from '@/presentation/lib'
+import { getAvaliations } from '@/services/call'
+import { IHistoryAnalysis } from '@/types'
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedId, setSelectedId] = useState(null)
@@ -28,11 +29,13 @@ export function HistoryPage() {
     setSelectedId(id)
     onOpen()
   }
+
   async function fetchHistory() {
     try {
       const data = await getAvaliations({
         statusSolicitacao: 'HISTORY',
       })
+
       setHistory(transformevaluationToHistory(data))
       toast.success('Histórico trazidos com sucesso')
     } catch (error: any) {
@@ -42,6 +45,7 @@ export function HistoryPage() {
   useEffect(() => {
     fetchHistory()
   }, [])
+
   return (
     <div className="max-w-[1400px] mx-auto p-5 space-y-6">
       {/* Page Header */}
@@ -78,7 +82,7 @@ export function HistoryPage() {
           </div>
 
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
-            <Select label="Status" defaultSelectedKeys={['todos']}>
+            <Select defaultSelectedKeys={['todos']} label="Status">
               <SelectItem key="todos">Todos</SelectItem>
               <SelectItem key="aprovadas">Aprovadas</SelectItem>
               <SelectItem key="rejeitadas">Rejeitadas</SelectItem>
@@ -91,9 +95,9 @@ export function HistoryPage() {
               <SelectItem>Cooperativa Verde Campo</SelectItem>
             </Select>
 
-            <Input label="Data Inicial" type="date" defaultValue="2024-01-01" />
-            <Input label="Data Final" type="date" defaultValue="2024-06-15" />
-            <Input label="Valor Mínimo" type="number" placeholder="R$ 0" />
+            <Input defaultValue="2024-01-01" label="Data Inicial" type="date" />
+            <Input defaultValue="2024-06-15" label="Data Final" type="date" />
+            <Input label="Valor Mínimo" placeholder="R$ 0" type="number" />
             <Button color="primary" startContent="🔍">
               Buscar
             </Button>
@@ -187,7 +191,7 @@ export function HistoryPage() {
             <span className="text-sm text-gray-500">
               Mostrando 1 a 25 de 1,403 registros
             </span>
-            <Pagination total={57} initialPage={1} />
+            <Pagination initialPage={1} total={57} />
           </div>
         </CardBody>
       </Card>
@@ -195,9 +199,9 @@ export function HistoryPage() {
       {/* Detail Modal */}
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        size="2xl"
         scrollBehavior="inside"
+        size="2xl"
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           {(onClose) => (

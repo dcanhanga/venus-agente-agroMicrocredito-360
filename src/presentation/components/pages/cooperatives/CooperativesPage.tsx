@@ -1,4 +1,3 @@
-import { delinquencyRate } from '@/presentation/lib/utils'
 import {
   Card,
   CardBody,
@@ -9,11 +8,14 @@ import {
 } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+
 import {
   addCooperative,
   getCooperatives,
   deleteCooperative, // precisa implementar no services/call
 } from '../../../../services/call'
+
+import { delinquencyRate } from '@/presentation/lib/utils'
 
 export function CooperativesPage() {
   const [name, setName] = useState('')
@@ -27,6 +29,7 @@ export function CooperativesPage() {
   async function fetchCooperatives() {
     try {
       const data = await getCooperatives()
+
       setCooperatives(data)
     } catch {
       toast.error('Erro ao carregar as cooperativas!')
@@ -41,6 +44,7 @@ export function CooperativesPage() {
     try {
       if (!name || !nif || !location || !productType || productVolume <= 0) {
         toast.error('Preencha todos os campos corretamente!')
+
         return
       }
 
@@ -119,18 +123,18 @@ export function CooperativesPage() {
               <SelectItem key="Commerce">Comércio</SelectItem>
             </Select>
             <Input
-              type="number"
               label="Volume do Produto"
+              type="number"
+              onChange={(e) => setProductVolume(parseInt(e.target.value) || 0)}
               placeholder="Digite o volume"
               //@ts-ignore
               value={productVolume}
-              onChange={(e) => setProductVolume(parseInt(e.target.value) || 0)}
             />
           </div>
           <div className="flex justify-end gap-4">
             <Button
-              variant="flat"
               color="default"
+              variant="flat"
               onClick={() => {
                 setName('')
                 setNif('')
@@ -143,8 +147,8 @@ export function CooperativesPage() {
             </Button>
             <Button
               color="primary"
-              onClick={handleRegisterCooperative}
               isLoading={loading}
+              onClick={handleRegisterCooperative}
             >
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
@@ -176,12 +180,12 @@ export function CooperativesPage() {
                 {new Date(coop.dataCriacao).toLocaleDateString('pt-PT')}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button size="sm" color="warning">
+                <Button color="warning" size="sm">
                   Editar
                 </Button>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   onClick={() => handleDeleteCooperative(coop.id)}
                 >
                   Excluir

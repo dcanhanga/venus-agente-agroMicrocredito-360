@@ -6,18 +6,22 @@ const login = async (email: string, password: string) => {
       email,
       password,
     })
+
     return response.data
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
 const addCooperative = async (data: any) => {
   try {
     const response = await api.post('/api/cooperativas', data)
+
     return response.data.dados[0]
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
@@ -25,9 +29,11 @@ const addCooperative = async (data: any) => {
 const addFinancialInstituition = async (data: any) => {
   try {
     const response = await api.post('/api/instituicoes-financeiras', data)
+
     return response.data.dados[0]
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
@@ -35,45 +41,55 @@ const addFinancialInstituition = async (data: any) => {
 const getCooperatives = async () => {
   try {
     const response = await api.get('/api/cooperativas')
+
     return response.data.dados
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
 const getFinancialInstituitions = async () => {
   try {
     const response = await api.get('/api/instituicoes-financeiras')
+
     return response.data.dados
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
 const deleteFinancialInstituitions = async (finId: number) => {
   try {
     const response = await api.delete(`/api/instituicoes-financeiras/${finId}`)
+
     return response.data.data
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
 const deleteCooperative = async (coopId: number) => {
   try {
     const response = await api.delete(`/api/cooperativas/${coopId}`)
+
     return response.data.data
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
 const addUser = async (data: any) => {
   try {
     const response = await api.post('/api/utilizadores/sign-up', data)
+
     return response.data.dados[0]
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
@@ -82,18 +98,22 @@ const getUsers = async (params: any) => {
     const response = await api.get('/api/utilizadores/unsed/user', {
       params,
     })
+
     return response.data.dados
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
 const deleteUser = async (userId: number) => {
   try {
     const response = await api.delete(`/api/utilizadores/sign-up/${userId}`)
+
     return response.data.data
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
@@ -101,9 +121,11 @@ const deleteUser = async (userId: number) => {
 const addCooperativaUtilizador = async (data: any) => {
   try {
     const response = await api.post('/api/cooperativa-membros', data)
+
     return response.data.dados[0]
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }
@@ -116,9 +138,11 @@ const getAvaliations = async (params: any) => {
         params,
       },
     )
+
     return response.data.dados
   } catch (responseError: any) {
     const error = responseError.response.data
+
     throw new Error(error.erro[0])
   }
 }

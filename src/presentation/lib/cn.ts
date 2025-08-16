@@ -1,6 +1,7 @@
-import { ICreditAnalysis } from '@/types'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+
+import { ICreditAnalysis } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -12,11 +13,12 @@ export function transformevaluationToHistory(evaluations: ICreditAnalysis[]) {
     const requester = evaluation.solicitante
     const cooperative = evaluation.cooperativa
     const lastReview = evaluation.ultimaAvaliacao
+
     return {
       request,
       cooperative,
       lastReview,
-      requester
+      requester,
     }
   })
 }

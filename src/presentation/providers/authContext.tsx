@@ -1,5 +1,3 @@
-import { STORAGE_TOKEN_KEY, STORAGE_USER_KEY } from '@/constants'
-import { login } from '@/services/call'
 import {
   useContext,
   createContext,
@@ -9,10 +7,13 @@ import {
 } from 'react'
 import { toast } from 'react-toastify'
 
+import { STORAGE_TOKEN_KEY, STORAGE_USER_KEY } from '@/constants'
+import { login } from '@/services/call'
+
 interface IUser {
   id: number
   email: string
-  tipo_utilizador: string
+  tipo_utilizador: 'ENTIDADE' | 'ADMIN'
   dataCriacao: string
   dataAtualizacao: string
   modificadoPorNome: string | null
@@ -54,6 +55,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     try {
       const response: LoginResponse = await login(email, password)
       const { token, utilizador } = response.dados[0]
+
       setUser(utilizador)
       localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(utilizador))
       localStorage.setItem(STORAGE_TOKEN_KEY, token)
@@ -65,9 +67,11 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
   const loadStorageData = () => {
     setSplashLoading(true)
     const storageUserData = localStorage.getItem(STORAGE_USER_KEY)
+
     if (storageUserData) {
       console.log(storageUserData)
       const storageUser = JSON.parse(storageUserData)
+
       setUser(storageUser)
     }
     setTimeout(() => {
@@ -78,6 +82,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
   useEffect(() => {
     loadStorageData()
   }, [])
+
   return (
     <AuthContext.Provider
       value={{
@@ -95,6 +100,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
 }
 const useAuth = () => {
   const authContext = useContext(AuthContext)
+
   return authContext
 }
 

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Input, Button, Card, CardBody } from '@heroui/react'
-import { useAuth } from '../../../providers/authContext'
 import { toast } from 'react-toastify'
+
+import { useAuth } from '../../../providers/authContext'
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setpassword] = useState('')
@@ -56,41 +57,41 @@ export function LoginPage() {
           )}
 
           {/* Formulário */}
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form className="space-y-5" onSubmit={handleLogin}>
             <Input
-              label="Email"
-              type="email"
-              placeholder="Digite seu email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               required
+              label="Email"
+              placeholder="Digite seu email"
+              type="email"
+              value={email}
               variant="bordered"
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <Input
-              label="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Digite sua password"
-              value={password}
-              onChange={(e) => setpassword(e.target.value)}
               required
-              variant="bordered"
               endContent={
                 <button
+                  className="text-gray-500 hover:text-emerald-500"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-gray-500 hover:text-emerald-500"
                 >
                   {showPassword ? '🙈' : '👁️'}
                 </button>
               }
+              label="password"
+              placeholder="Digite sua password"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              variant="bordered"
+              onChange={(e) => setpassword(e.target.value)}
             />
 
             {/* Esqueceu password */}
             <div className="text-right">
               <button
-                type="button"
                 className="text-emerald-500 hover:underline text-sm"
+                type="button"
                 onClick={() => alert('Recuperação de password em breve!')}
               >
                 Esqueceu sua password?
@@ -99,10 +100,10 @@ export function LoginPage() {
 
             {/* Botão login */}
             <Button
-              type="submit"
-              color="primary"
               className="w-full bg-gradient-to-br from-emerald-500 to-green-900 text-white font-semibold rounded-xl"
+              color="primary"
               isLoading={loading}
+              type="submit"
             >
               Entrar
             </Button>
@@ -110,31 +111,31 @@ export function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center my-6">
-            <div className="flex-1 h-px bg-gray-200"></div>
+            <div className="flex-1 h-px bg-gray-200" />
             <span className="px-4 text-gray-500 text-sm">ou continue com</span>
-            <div className="flex-1 h-px bg-gray-200"></div>
+            <div className="flex-1 h-px bg-gray-200" />
           </div>
 
           {/* Social login */}
           <div className="flex gap-4 mb-4">
             <button
-              onClick={() => {}}
               className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-red-500"
               title="Entrar com Google"
+              onClick={() => {}}
             >
               🔴
             </button>
             <button
-              onClick={() => {}}
               className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-blue-600"
               title="Entrar com Facebook"
+              onClick={() => {}}
             >
               🔵
             </button>
             <button
-              onClick={() => {}}
               className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-black"
               title="Entrar com Apple"
+              onClick={() => {}}
             >
               ⚫
             </button>
@@ -144,8 +145,8 @@ export function LoginPage() {
           <p className="text-center text-gray-600 text-sm">
             Não tem uma conta?{' '}
             <button
-              onClick={() => alert('Cadastro em breve!')}
               className="text-emerald-500 font-semibold hover:underline"
+              onClick={() => alert('Cadastro em breve!')}
             >
               Cadastre-se aqui
             </button>

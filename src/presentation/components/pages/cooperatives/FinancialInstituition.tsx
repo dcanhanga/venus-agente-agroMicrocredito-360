@@ -7,12 +7,13 @@ import {
   SelectItem,
 } from '@heroui/react'
 import { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+
 import {
   addFinancialInstituition,
   deleteFinancialInstituitions,
   getFinancialInstituitions,
 } from '../../../../services/call'
-import { toast } from 'react-toastify'
 
 export function FinancialInstitutionsPage() {
   const [instituicoes, setInstituicoes] = useState<any>([])
@@ -35,6 +36,7 @@ export function FinancialInstitutionsPage() {
   const carregarInstituicoes = async () => {
     try {
       const data = await getFinancialInstituitions()
+
       setInstituicoes(data)
     } catch (error) {
       toast.error('Erro ao carregar instituições financeiras')
@@ -44,6 +46,7 @@ export function FinancialInstitutionsPage() {
   const cadastrarInstituicao = async () => {
     if (!form.nome || !form.tipo || !form.idUtilizador) {
       toast.warning('Preencha todos os campos!')
+
       return
     }
 
@@ -108,24 +111,24 @@ export function FinancialInstitutionsPage() {
             </Select>
             <Input
               label="ID do Utilizador"
-              type="number"
               placeholder="Digite o ID"
+              type="number"
               value={form.idUtilizador}
               onChange={(e) => handleChange('idUtilizador', e.target.value)}
             />
           </div>
           <div className="flex justify-end gap-4">
             <Button
-              variant="flat"
               color="default"
+              variant="flat"
               onPress={() => setForm({ nome: '', tipo: '', idUtilizador: '' })}
             >
               Limpar
             </Button>
             <Button
               color="primary"
-              onPress={cadastrarInstituicao}
               isLoading={loading}
+              onPress={cadastrarInstituicao}
             >
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
@@ -157,15 +160,15 @@ export function FinancialInstitutionsPage() {
                 ✏️ Modificado por: {inst.modificadoPorNome}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button size="sm" color="success">
+                <Button color="success" size="sm">
                   Ver
                 </Button>
-                <Button size="sm" color="warning">
+                <Button color="warning" size="sm">
                   Editar
                 </Button>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   onPress={() => handleDelete(inst.id)}
                 >
                   Excluir
