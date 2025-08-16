@@ -107,7 +107,15 @@ const addCooperativaUtilizador = async (data: any) => {
     throw new Error(error.erro[0])
   }
 }
-
+const addDecision = async (data: any) => {
+  try {
+    const response = await api.post('/api/avaliacoes-solicitacao', data)
+    return response.data.dados[0]
+  } catch (responseError: any) {
+    const error = responseError.response.data
+    throw new Error(error.erro[0])
+  }
+}
 const getAvaliations = async (params: any) => {
   try {
     const response = await api.get(
@@ -136,4 +144,5 @@ export {
   getUsers,
   addCooperativaUtilizador,
   getAvaliations,
+  addDecision,
 }

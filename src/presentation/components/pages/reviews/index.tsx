@@ -22,7 +22,8 @@ export function ReviewsPage() {
   >([])
   const [selectedAvaliationIndex, setSelectedAvaliationIndex] = useState(0)
   const [cooperativeOptions, setCooperativeOptions] = useState<string[]>([])
-
+  const [observacoes, setObservacoes] = useState('')
+  const [loadingDecision, setLoadingDecision] = useState(false)
   // Filtros
   const [filters, setFilters] = useState({
     cooperativa: '',
@@ -46,6 +47,32 @@ export function ReviewsPage() {
       setFilteredEvaluation(data)
     } catch (error: any) {
       toast.error(error)
+    }
+  }
+  async function handleDecision(aprovada: boolean) {
+    if (!selectedSolicitation) return
+    setLoadingDecision(true)
+
+    const payload = {
+      id: 1,
+      idSolicitacao: selectedSolicitation.id,
+      decisao: observacoes || (aprovada ? 'Aprovado' : 'Reprovado'),
+      aprovada,
+    }
+
+    try {
+      await addDecision(payload)
+      toast.success(
+        aprovada
+          ? 'Decisão de aprovação registrada!'
+          : 'Decisão de rejeição registrada!',
+      )
+      setObservacoes('')
+      fetchGuarantees()
+    } catch (error: any) {
+      toast.error('Erro ao registrar decisão: ' + error)
+    } finally {
+      setLoadingDecision(false) // 🔄 desativa loading nos dois botões
     }
   }
 
@@ -98,18 +125,12 @@ export function ReviewsPage() {
           Avaliação de Solicitações
         </h1>
         <div className="flex gap-5">
-          {[
-            { num: 23, label: 'Pendentes', color: 'text-amber-500' },
-            { num: 8, label: 'Hoje', color: 'text-amber-500' },
-            { num: 5, label: 'Atrasadas', color: 'text-amber-500' },
-          ].map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className={`text-xl font-bold ${stat.color}`}>
-                {stat.num}
-              </div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
+          <div className="text-center">
+            <div className={`text-xl font-bold text-amber-500`}>
+              {filteredEvaluation.length}
             </div>
-          ))}
+            <div className="text-sm text-gray-500">Pendentes</div>
+          </div>
         </div>
       </div>
 
