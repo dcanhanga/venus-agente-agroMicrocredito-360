@@ -1,11 +1,13 @@
 import { Card, CardBody, Select, SelectItem, Button } from '@heroui/react'
 import { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+
 import {
   addCooperativaUtilizador,
   getCooperatives,
   getUsers,
 } from '../../../../services/call'
-import { toast } from 'react-toastify'
+
 import { generateHash15 } from '@/presentation/lib/utils'
 
 export function CooperativaUtilizadorPage() {
@@ -29,10 +31,12 @@ export function CooperativaUtilizadorPage() {
   const carregarSelects = async () => {
     try {
       const coopData = await getCooperatives()
+
       setCooperativas(coopData)
       const usersData = await getUsers({
         estado: false,
       })
+
       setUsers(usersData)
     } catch (error) {
       toast.error('Erro ao carregar dados para o formulário')
@@ -42,6 +46,7 @@ export function CooperativaUtilizadorPage() {
   const cadastrar = async () => {
     if (!form.idCooperativa || !form.idUtilizador) {
       toast.warning('Selecione a cooperativa e o utilizador!')
+
       return
     }
 
@@ -52,6 +57,7 @@ export function CooperativaUtilizadorPage() {
         idUtilizador: Number(form.idUtilizador),
         nome: generateHash15(),
       }
+
       await addCooperativaUtilizador(payload)
       toast.success('Vínculo cadastrado com sucesso!')
       setForm({ idCooperativa: '', idUtilizador: '' })
@@ -95,13 +101,13 @@ export function CooperativaUtilizadorPage() {
 
           <div className="flex justify-end gap-4">
             <Button
-              variant="flat"
               color="default"
+              variant="flat"
               onPress={() => setForm({ idCooperativa: '', idUtilizador: '' })}
             >
               Limpar
             </Button>
-            <Button color="primary" onPress={cadastrar} isLoading={loading}>
+            <Button color="primary" isLoading={loading} onPress={cadastrar}>
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
           </div>

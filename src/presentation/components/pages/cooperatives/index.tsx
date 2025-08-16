@@ -1,4 +1,5 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+
 import { CooperativesPage } from './CooperativesPage'
 import { FinancialInstitutionsPage } from './FinancialInstituition'
 import { UsersPage } from './UserPage'

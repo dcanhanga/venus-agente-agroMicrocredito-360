@@ -7,8 +7,9 @@ import {
   SelectItem,
 } from '@heroui/react'
 import { useState, useEffect } from 'react'
-import { addUser, deleteUser, getUsers } from '../../../../services/call'
 import { toast } from 'react-toastify'
+
+import { addUser, deleteUser, getUsers } from '../../../../services/call'
 
 export function UsersPage() {
   const [users, setUsers] = useState<any>([])
@@ -33,6 +34,7 @@ export function UsersPage() {
       const data = await getUsers({
         estado: false,
       })
+
       setUsers(data)
     } catch (error) {
       toast.error('Erro ao carregar utilizadores')
@@ -42,6 +44,7 @@ export function UsersPage() {
   const cadastrarUser = async () => {
     if (!form.email || !form.password || !form.tipo_utilizador) {
       toast.warning('Preencha todos os campos!')
+
       return
     }
 
@@ -83,15 +86,15 @@ export function UsersPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
             <Input
               label="Email"
-              type="email"
               placeholder="Digite o email"
+              type="email"
               value={form.email}
               onChange={(e) => handleChange('email', e.target.value)}
             />
             <Input
               label="Senha"
-              type="password"
               placeholder="Digite a senha"
+              type="password"
               value={form.password}
               onChange={(e) => handleChange('password', e.target.value)}
             />
@@ -108,15 +111,15 @@ export function UsersPage() {
           </div>
           <div className="flex justify-end gap-4">
             <Button
-              variant="flat"
               color="default"
+              variant="flat"
               onPress={() =>
                 setForm({ email: '', password: '', tipo_utilizador: '' })
               }
             >
               Limpar
             </Button>
-            <Button color="primary" onPress={cadastrarUser} isLoading={loading}>
+            <Button color="primary" isLoading={loading} onPress={cadastrarUser}>
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
           </div>
@@ -143,15 +146,15 @@ export function UsersPage() {
                 ✏️ Modificado por: {user.modificadoPorNome || '—'}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button size="sm" color="success">
+                <Button color="success" size="sm">
                   Ver
                 </Button>
-                <Button size="sm" color="warning">
+                <Button color="warning" size="sm">
                   Editar
                 </Button>
                 <Button
-                  size="sm"
                   color="danger"
+                  size="sm"
                   onPress={() => handleDelete(user.id)}
                 >
                   Excluir

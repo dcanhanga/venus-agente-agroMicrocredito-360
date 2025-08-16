@@ -1,6 +1,4 @@
 //@ts-nocheck
-import { getAvaliations } from '@/services/call'
-import { ICreditAnalysis } from '@/types'
 import {
   Button,
   Input,
@@ -14,6 +12,9 @@ import {
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { HiOfficeBuilding, HiShieldExclamation } from 'react-icons/hi'
+
+import { ICreditAnalysis } from '@/types'
+import { getAvaliations } from '@/services/call'
 
 export function ReviewsPage() {
   const [evaluation, setEvaluation] = useState<ICreditAnalysis[]>([])
@@ -43,6 +44,7 @@ export function ReviewsPage() {
       const data = await getAvaliations({
         statusSolicitacao: 'REJEITADA',
       })
+
       setEvaluation(data)
       setFilteredEvaluation(data)
     } catch (error: any) {
@@ -115,8 +117,10 @@ export function ReviewsPage() {
     const uniqueCooperatives = Array.from(
       new Set(evaluation.map((e) => e.cooperativa.nome)),
     )
+
     setCooperativeOptions(uniqueCooperatives)
   }, [evaluation])
+
   return (
     <div className="max-w-[1400px] mx-auto p-5 font-sans bg-gray-100 text-gray-800">
       {/* Page Header */}
@@ -154,29 +158,29 @@ export function ReviewsPage() {
               ))}
             </Select>
             <Input
-              type="number"
               label="Valor Mínimo"
               placeholder="KZ 0"
+              type="number"
               onChange={(e) =>
                 setFilters((f) => ({ ...f, valorMin: e.target.value }))
               }
             />
             <Input
-              type="number"
               label="Valor Máximo"
               placeholder="KZ 500.000"
+              type="number"
               onChange={(e) =>
                 setFilters((f) => ({ ...f, valorMax: e.target.value }))
               }
             />
             <Input
-              type="date"
               label="Data Limite"
+              type="date"
               onChange={(e) =>
                 setFilters((f) => ({ ...f, dataLimite: e.target.value }))
               }
             />
-            <Button color="primary" className="mt-5" onClick={applyFilters}>
+            <Button className="mt-5" color="primary" onClick={applyFilters}>
               🔍 Filtrar
             </Button>
           </div>
@@ -195,15 +199,16 @@ export function ReviewsPage() {
               const garanteeString = evaluation.garantias
                 .map((g) => g.descricao)
                 .join(',')
+
               return (
                 <div
-                  onClick={() => setSelectedAvaliationIndex(i)}
                   key={i}
                   className={`p-5 border-b hover:bg-gray-50 cursor-pointer ${
                     selectedAvaliationIndex === i
                       ? 'bg-blue-50 border-l-4 border-blue-500'
                       : ''
                   }`}
+                  onClick={() => setSelectedAvaliationIndex(i)}
                 >
                   <div className="flex justify-between">
                     <div className="font-bold text-gray-700">#{request.id}</div>
@@ -326,7 +331,7 @@ export function ReviewsPage() {
                   className="flex justify-between items-center p-3 border rounded bg-gray-50"
                 >
                   <span>{doc}</span>
-                  <a href="#" className="text-blue-600 text-sm font-medium">
+                  <a className="text-blue-600 text-sm font-medium" href="#">
                     Ver
                   </a>
                 </div>
@@ -344,10 +349,10 @@ export function ReviewsPage() {
                 placeholder="Observações e justificativas para a decisão..."
               />
               <div className="flex gap-2">
-                <Button color="success" className="flex-1">
+                <Button className="flex-1" color="success">
                   ✅ Aprovar
                 </Button>
-                <Button color="danger" className="flex-1">
+                <Button className="flex-1" color="danger">
                   ❌ Rejeitar
                 </Button>
               </div>
