@@ -12,10 +12,11 @@ import {
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { HiOfficeBuilding, HiShieldExclamation } from 'react-icons/hi'
+import { HiCheckCircle } from 'react-icons/hi'
 
 import { ICreditAnalysis } from '@/types'
 import { getAvaliations, addDecision, addAnalisys } from '@/services/call'
-
+import { GuaranteeGrid } from '../../molecules/guaranteeGrid'
 export function ReviewsPage() {
   const [evaluation, setEvaluation] = useState<ICreditAnalysis[]>([])
   const [filteredEvaluation, setFilteredEvaluation] = useState<
@@ -95,7 +96,7 @@ export function ReviewsPage() {
   function applyFilters() {
     let filtered = [...evaluation]
 
-    if (filters.cooperativa && filters.cooperativa != '') {
+    if (filters.cooperativa && filters.cooperativa != 'all') {
       filtered = filtered.filter((e) =>
         e.cooperativa.nome
           .toLowerCase()
@@ -156,13 +157,19 @@ export function ReviewsPage() {
             <Select
               label="Cooperativa"
               placeholder="Todas"
-              onChange={(e) => {
-                setFilters((f) => ({ ...f, cooperativa: e.target.value }))
-                console.log(e.target.value)
+              selectedKeys={filters.cooperativa ? [filters.cooperativa] : []}
+              onSelectionChange={(keys) => {
+                const value = Array.from(keys)[0] || '' // pega o único selecionado
+                setFilters((f) => ({
+                  ...f,
+                  cooperativa: value === 'all' ? '' : value,
+                }))
               }}
             >
-              <SelectItem value="0">Todas</SelectItem>
-              {cooperativeOptions.map((coop, idx) => (
+              <SelectItem key="all" value="all">
+                Todas
+              </SelectItem>
+              {cooperativeOptions.map((coop) => (
                 <SelectItem key={coop} value={coop}>
                   {coop}
                 </SelectItem>
@@ -207,9 +214,7 @@ export function ReviewsPage() {
             {filteredEvaluation.map((evaluation, i) => {
               const request = evaluation.solicitacao
               const cooperative = evaluation.cooperativa
-              const garanteeString = evaluation.garantias
-                .map((g) => g.descricao)
-                .join(',')
+              const garantees = evaluation.garantias
               const riskAnalysis = evaluation?.analisesRisco[0]
               return (
                 <div
@@ -257,12 +262,12 @@ export function ReviewsPage() {
                       </span>
                       {request.finalidadeCredito}
                     </div>
-                    <div>
-                      <span className="text-gray-500 font-medium">
-                        Garantia:
-                      </span>
-                      {garanteeString}
-                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                      Garantias
+                    </h3>
+                    <GuaranteeGrid guarantees={garantees} />
                   </div>
                 </div>
               )
@@ -307,7 +312,7 @@ export function ReviewsPage() {
                 <>
                   <div className="text-center bg-gray-50 p-5 rounded mb-4">
                     <div className="text-4xl font-bold text-amber-500">
-                      {selectedRiskAnalisys.score}
+                      {selectedRiskAnalisys.score.toFixed(2)}
                     </div>
                     <div className="text-sm text-gray-500">Score de Risco</div>
                   </div>

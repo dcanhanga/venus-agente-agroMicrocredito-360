@@ -93,4 +93,5 @@ export interface IHistoryAnalysis {
   requester: IApplicant
   riskAnalysis: IRiskAnalysis | undefined
   guarantees: string
+  allGuarantees: IGuarantee[]
 }

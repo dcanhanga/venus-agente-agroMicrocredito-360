@@ -23,6 +23,8 @@ import { HistoricalDecisionsMetrics } from './metricsSection'
 import { transformevaluationToHistory } from '@/presentation/lib'
 import { getAvaliations } from '@/services/call'
 import { IHistoryAnalysis } from '@/types'
+import { exportExcel } from '@/presentation/lib/exportXls'
+import { GuaranteeGrid } from '../../molecules/guaranteeGrid'
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedId, setSelectedId] = useState<number | undefined>()
@@ -50,16 +52,21 @@ export function HistoryPage() {
 
   return (
     <div className="max-w-[1400px] mx-auto p-5 space-y-6">
-
       <HistoricalDecisionsMetrics />
-      {/* Filters */}
-      <Card  isHoverable
+
+      <Card
+        isHoverable
         className="border border-divider shadow-sm hover:shadow-md transition-shadow duration-300"
       >
         <CardBody>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Filtros e Busca</h2>
-            <Button color="success" size="sm" startContent="📊">
+            <Button
+              color="success"
+              size="sm"
+              startContent="📊"
+              onClick={() => exportExcel(history)}
+            >
               Exportar Dados
             </Button>
           </div>
@@ -122,9 +129,9 @@ export function HistoryPage() {
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">
                   Solicitante
                 </th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
+                {/* <th className="p-3 text-left text-sm font-semibold text-gray-600">
                   Tempo Análise
-                </th>
+                </th> */}
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">
                   Ações
                 </th>
@@ -160,7 +167,7 @@ export function HistoryPage() {
                   <td className="p-3 text-sm text-gray-500">
                     {hist.requester.email}
                   </td>
-                  <td className="p-3">6 horas</td>
+                  {/* <td className="p-3">6 horas</td> */}
                   <td className="p-3 flex gap-2">
                     <Button
                       isIconOnly
@@ -204,26 +211,30 @@ export function HistoryPage() {
                     const item = history[selectedId]
 
                     return (
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <h4 className="font-semibold mb-2">
-                            Informações da Solicitação
-                          </h4>
+                      <div className="grid md:grid-cols-1 gap-4">
+                        <div className="bg-gray-50 p-4 rounded-lg ">
+                          <div className="grid grid-cols-2">
+                            <h4 className="font-semibold mb-2">
+                              Informações da Solicitação
+                            </h4>
+                            <p>
+                              <b>ID:</b> # {item.request.id}
+                            </p>
+                            <p>
+                              <b>Valor:</b> KZ {item.request.valorSolicitado}
+                            </p>
+                            <p>
+                              <b>Data Solicitação:</b>{' '}
+                              {item.request.dataSolicitacao}
+                            </p>
+                            <p>
+                              <b>Finalidade:</b>{' '}
+                              {item.request.finalidadeCredito}
+                            </p>
+                          </div>
                           <p>
-                            <b>ID:</b> # {item.request.id}
-                          </p>
-                          <p>
-                            <b>Valor:</b> KZ {item.request.valorSolicitado}
-                          </p>
-                          <p>
-                            <b>Data Solicitação:</b>{' '}
-                            {item.request.dataSolicitacao}
-                          </p>
-                          <p>
-                            <b>Finalidade:</b> {item.request.finalidadeCredito}
-                          </p>
-                          <p>
-                            <b>Garantia:</b> {item.guarantees}
+                            <b>Garantia:</b>
+                            <GuaranteeGrid guarantees={item.allGuarantees} />
                           </p>
                         </div>
 
