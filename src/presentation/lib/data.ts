@@ -21,3 +21,26 @@ export const allLocations = [
   'Uíge',
   'Zaire',
 ]
+
+export const culturasNomes = [
+  'milho',
+  'cafe',
+  'feijao',
+  'soja',
+  'arroz',
+  'cana',
+  'mandioca',
+  'batata-doce',
+  'milheto',
+  'amendoim',
+  'algodao',
+  'sisal',
+  'tabaco',
+  'palma',
+  'coco',
+  'banana',
+  'manga',
+  'laranja',
+  'abacaxi',
+  'saca',
+]

@@ -16,7 +16,7 @@ import {
 } from '../../../../services/call'
 
 import { delinquencyRate } from '@/presentation/lib/utils'
-import { allLocations } from '@/presentation/lib/data'
+import { allLocations, culturasNomes } from '@/presentation/lib/data'
 
 export function CooperativesPage() {
   const [name, setName] = useState('')
@@ -145,9 +145,11 @@ export function CooperativesPage() {
               selectedKeys={productType ? [productType] : []}
               onChange={(e) => setProductType(e.target.value)}
             >
-              <SelectItem key="Agriculture">Agricultura</SelectItem>
-              <SelectItem key="Fishing">Pesca</SelectItem>
-              <SelectItem key="Commerce">Comércio</SelectItem>
+              {culturasNomes.map((str) => (
+                <SelectItem key={str}>
+                  {str.charAt(0).toUpperCase() + str.slice(1)}
+                </SelectItem>
+              ))}
             </Select>
 
             <Input
