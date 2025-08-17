@@ -15,7 +15,7 @@ type SideBarProps = Omit<React.ComponentProps<'aside'>, 'children'>
 export function Sidebar(props: SideBarProps) {
   const { className, ...rest } = props
   const { isCollapsed } = useSidebar()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const menuItems = React.useMemo(() => {
     if (!user) return []
     if (user.tipo_utilizador === tipo_utilizador.ADMIN) {
@@ -76,6 +76,7 @@ export function Sidebar(props: SideBarProps) {
           className={cn(!isCollapsed && 'justify-start')}
           color="danger"
           fullWidth={!isCollapsed}
+          onClick={() => logout()}
           isIconOnly={isCollapsed}
           startContent={
             <Icon

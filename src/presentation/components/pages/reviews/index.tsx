@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { HiOfficeBuilding, HiShieldExclamation } from 'react-icons/hi'
 
 import { ICreditAnalysis } from '@/types'
-import { getAvaliations, addDecision } from '@/services/call'
+import { getAvaliations, addDecision, addAnalisys } from '@/services/call'
 
 export function ReviewsPage() {
   const [evaluation, setEvaluation] = useState<ICreditAnalysis[]>([])
@@ -25,6 +25,7 @@ export function ReviewsPage() {
   const [cooperativeOptions, setCooperativeOptions] = useState<string[]>([])
   const [observacoes, setObservacoes] = useState('')
   const [loadingDecision, setLoadingDecision] = useState(false)
+  const [loadingAnalisys, setLoadingAnalisys] = useState(false)
   // Filtros
   const [filters, setFilters] = useState({
     cooperativa: '',
@@ -45,8 +46,6 @@ export function ReviewsPage() {
       const data = await getAvaliations({
         statusSolicitacao: 'PENDENTE',
       })
-      console.log(data)
-
       setEvaluation(data)
       setFilteredEvaluation(data)
     } catch (error: any) {
@@ -78,6 +77,19 @@ export function ReviewsPage() {
     } finally {
       setLoadingDecision(false)
     }
+  }
+
+  async function applyAnalisys(solicitationId) {
+    try {
+      if (!solicitationId) return
+      setLoadingAnalisys(true)
+      const analisys = await addAnalisys(solicitationId)
+      toast.success('Solicitação analisada com sucesso')
+      fetchGuarantees()
+    } catch (error: any) {
+      toast.error(error)
+    }
+    setLoadingAnalisys(false)
   }
 
   function applyFilters() {
@@ -198,7 +210,7 @@ export function ReviewsPage() {
               const garanteeString = evaluation.garantias
                 .map((g) => g.descricao)
                 .join(',')
-
+              const riskAnalysis = evaluation?.analisesRisco[0]
               return (
                 <div
                   key={i}
@@ -211,8 +223,21 @@ export function ReviewsPage() {
                 >
                   <div className="flex justify-between">
                     <div className="font-bold text-gray-700">#{request.id}</div>
-                    <div className="text-lg font-bold text-green-600">
-                      {request.valorSolicitado} KZ
+                    <div className="flex flex-col items-end">
+                      <p className="text-lg font-bold text-green-600">
+                        {request.valorSolicitado} KZ
+                      </p>
+                      <div>
+                        {!riskAnalysis && (
+                          <Button
+                            isLoading={loadingAnalisys}
+                            onClick={() => applyAnalisys(request.id)}
+                            className=" rounded-md text-white bg-purple-400 px-4 py-2 text-xs"
+                          >
+                            Analisar Risco
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
@@ -245,9 +270,7 @@ export function ReviewsPage() {
           </CardBody>
         </Card>
 
-        {/* Details Panel */}
         <div className="flex flex-col gap-5">
-          {/* Cooperative Info */}
           <Card>
             <CardHeader className="font-bold text-lg flex items-center gap-2">
               🏛️ Informações da Cooperativa
@@ -274,7 +297,7 @@ export function ReviewsPage() {
               )}
             </CardBody>
           </Card>
-          {/* Risk Analysis */}
+
           <Card>
             <CardHeader className="font-bold text-lg flex items-center gap-2">
               ⚠️ Análise de Risco
@@ -313,31 +336,6 @@ export function ReviewsPage() {
               )}
             </CardBody>
           </Card>
-          {/* Documents */}
-          <Card>
-            <CardHeader className="font-bold text-lg flex items-center gap-2">
-              📄 Documentos
-            </CardHeader>
-            <CardBody className="flex flex-col gap-2">
-              {[
-                '📋 Formulário de Solicitação',
-                '📊 Demonstrações Financeiras',
-                '🏠 Documentos de Garantia',
-                '✅ Certidões Negativas',
-              ].map((doc, i) => (
-                <div
-                  key={i}
-                  className="flex justify-between items-center p-3 border rounded bg-gray-50"
-                >
-                  <span>{doc}</span>
-                  <a className="text-blue-600 text-sm font-medium" href="#">
-                    Ver
-                  </a>
-                </div>
-              ))}
-            </CardBody>
-          </Card>
-          {/* Decision */}
           <Card>
             <CardHeader className="font-bold text-lg flex items-center gap-2">
               ⚖️ Decisão

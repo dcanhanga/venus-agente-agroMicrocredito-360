@@ -19,6 +19,7 @@ export function UsersPage() {
     tipo_utilizador: '',
   })
   const [loading, setLoading] = useState(false)
+  const [actionLoading, setActionLoading] = useState(false)
 
   const handleChange = (field: any, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -69,17 +70,18 @@ export function UsersPage() {
 
   const handleDelete = async (id: any) => {
     try {
+      setActionLoading(true)
       await deleteUser(id)
       toast.success('Utilizador excluído com sucesso!')
       setUsers((prev: any) => prev.filter((user: any) => user.id !== id))
     } catch (error) {
       toast.error('Erro ao excluir utilizador!')
     }
+    setActionLoading(false)
   }
 
   return (
     <div className="max-w-[1200px] mx-auto p-5 bg-gray-50 text-gray-800">
-      {/* Formulário */}
       <Card className="mb-8">
         <CardBody>
           <h2 className="text-lg font-bold mb-5">Cadastrar Novo Utilizador</h2>
@@ -146,15 +148,16 @@ export function UsersPage() {
                 ✏️ Modificado por: {user.modificadoPorNome || '—'}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button color="success" size="sm">
+                <Button color="success" size="sm" isLoading={actionLoading}>
                   Ver
                 </Button>
-                <Button color="warning" size="sm">
+                <Button color="warning" size="sm" isLoading={actionLoading}>
                   Editar
                 </Button>
                 <Button
                   color="danger"
                   size="sm"
+                  isLoading={actionLoading}
                   onPress={() => handleDelete(user.id)}
                 >
                   Excluir

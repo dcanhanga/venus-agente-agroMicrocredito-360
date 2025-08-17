@@ -108,7 +108,7 @@ const getUsers = async (params: any) => {
 }
 const deleteUser = async (userId: number) => {
   try {
-    const response = await api.delete(`/api/utilizadores/sign-up/${userId}`)
+    const response = await api.delete(`/api/utilizadores/${userId}`)
 
     return response.data.data
   } catch (responseError: any) {
@@ -132,6 +132,17 @@ const addCooperativaUtilizador = async (data: any) => {
 const addDecision = async (data: any) => {
   try {
     const response = await api.post('/api/avaliacoes-solicitacao', data)
+    return response.data.dados[0]
+  } catch (responseError: any) {
+    const error = responseError.response.data
+    throw new Error(error.erro[0])
+  }
+}
+const addAnalisys = async (solicitacaoId: any) => {
+  try {
+    const response = await api.post(
+      '/api/analises-risco/gerar-automatica/' + solicitacaoId,
+    )
     return response.data.dados[0]
   } catch (responseError: any) {
     const error = responseError.response.data
@@ -169,4 +180,5 @@ export {
   addCooperativaUtilizador,
   getAvaliations,
   addDecision,
+  addAnalisys,
 }

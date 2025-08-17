@@ -1,4 +1,11 @@
-import { Card, CardBody, Select, SelectItem, Button } from '@heroui/react'
+import {
+  Card,
+  CardBody,
+  Select,
+  SelectItem,
+  Button,
+  Input,
+} from '@heroui/react'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
@@ -8,17 +15,15 @@ import {
   getUsers,
 } from '../../../../services/call'
 
-import { generateHash15 } from '@/presentation/lib/utils'
-
 export function CooperativaUtilizadorPage() {
   const [form, setForm] = useState({
     idCooperativa: '',
     idUtilizador: '',
+    nome: '',
   })
   const [loading, setLoading] = useState(false)
   const [cooperativas, setCooperativas] = useState<any[]>([])
   const [users, setUsers] = useState<any[]>([])
-
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
@@ -55,12 +60,12 @@ export function CooperativaUtilizadorPage() {
       const payload = {
         idCooperativa: Number(form.idCooperativa),
         idUtilizador: Number(form.idUtilizador),
-        nome: generateHash15(),
+        nome: form.nome,
       }
 
       await addCooperativaUtilizador(payload)
       toast.success('Vínculo cadastrado com sucesso!')
-      setForm({ idCooperativa: '', idUtilizador: '' })
+      setForm({ idCooperativa: '', idUtilizador: '', nome: '' })
     } catch (error) {
       toast.error('Erro ao cadastrar vínculo!')
     } finally {
@@ -97,13 +102,22 @@ export function CooperativaUtilizadorPage() {
                 <SelectItem key={String(user.id)}>{user.email}</SelectItem>
               ))}
             </Select>
+            <Input
+              label="Nome"
+              placeholder="Digite o nome"
+              type="text"
+              value={form.nome}
+              onChange={(e) => handleChange('nome', e.target.value)}
+            />
           </div>
 
           <div className="flex justify-end gap-4">
             <Button
               color="default"
               variant="flat"
-              onPress={() => setForm({ idCooperativa: '', idUtilizador: '' })}
+              onPress={() =>
+                setForm({ idCooperativa: '', idUtilizador: '', nome: '' })
+              }
             >
               Limpar
             </Button>

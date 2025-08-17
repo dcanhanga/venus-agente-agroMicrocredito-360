@@ -49,6 +49,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
   }
   const logout = async () => {
     localStorage.clear()
+    setUser(null)
     toast.success('Logout feito com sucesso')
   }
   const signIn = async (email: string, password: string) => {
