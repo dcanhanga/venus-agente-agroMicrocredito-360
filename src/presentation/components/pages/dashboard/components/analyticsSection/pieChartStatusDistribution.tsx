@@ -13,11 +13,6 @@ import { ChartCard } from './chartCard'
 import { appTheme } from '@/presentation/styles/appTheme'
 import { Dashboard } from '@/types/dashboard'
 
-const data = [
-  { name: 'Aprovadas', value: 65 },
-  { name: 'Pendentes', value: 20 },
-  { name: 'Rejeitadas', value: 15 },
-]
 
 const COLORS = [
   appTheme.themes.dark.colors.success.DEFAULT,
@@ -26,13 +21,12 @@ const COLORS = [
 ]
 
 export const PieChartStatusDistribution = ({ data }: { data?: Dashboard }) => {
-  const dataFormated = React.useMemo(() => {
+  const dataFormatted = React.useMemo(() => {
     return [
-        { name: 'Aprovadas', value: data?.dados.aprovadasEsteMes ?? 0 },
-        { name: 'Pendentes', value: data?.dados.rejeitadasEsteMes ?? 0 },
-        { name: 'Rejeitadas', value: data?.dados.rejeitadasEsteMes ?? 0 },
-      ]
-
+      { name: 'Aprovadas', value: data?.dados.aprovadasEsteMes ?? 0 },
+      { name: 'Pendentes', value: data?.dados.rejeitadasEsteMes ?? 0 },
+      { name: 'Rejeitadas', value: data?.dados.rejeitadasEsteMes ?? 0 },
+    ]
   }, [data])
 
   return (
@@ -45,12 +39,12 @@ export const PieChartStatusDistribution = ({ data }: { data?: Dashboard }) => {
         <PieChart>
           <Pie
             label
-            data={dataFormated}
+            data={dataFormatted}
             dataKey="value"
             nameKey="name"
             outerRadius={100}
           >
-            {dataFormated.map((_entry, index) => (
+            {dataFormatted.map((_entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
