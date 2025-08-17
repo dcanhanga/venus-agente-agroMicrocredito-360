@@ -16,11 +16,13 @@ import {
 } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { HiOutlineInformationCircle } from 'react-icons/hi'
+
+import { HistoricalDecisionsMetrics } from './metricsSection'
 
 import { transformevaluationToHistory } from '@/presentation/lib'
 import { getAvaliations } from '@/services/call'
 import { IHistoryAnalysis } from '@/types'
-import { HiOutlineInformationCircle } from 'react-icons/hi'
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedId, setSelectedId] = useState<number | undefined>()
@@ -48,34 +50,15 @@ export function HistoryPage() {
 
   return (
     <div className="max-w-[1400px] mx-auto p-5 space-y-6">
-      {/* Page Header */}
-      <Card shadow="sm">
-        <CardBody>
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Histórico de Decisões
-          </h1>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="bg-gray-50 p-4 rounded-lg text-center border">
-              <div className="text-2xl font-bold text-green-600">1,247</div>
-              <div className="text-sm text-gray-500">Total Aprovadas</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg text-center border">
-              <div className="text-2xl font-bold text-red-600">156</div>
-              <div className="text-sm text-gray-500">Total Rejeitadas</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg text-center border">
-              <div className="text-2xl font-bold text-blue-600">R$ 45.2M</div>
-              <div className="text-sm text-gray-500">Volume Total</div>
-            </div>
-          </div>
-        </CardBody>
-      </Card>
 
+      <HistoricalDecisionsMetrics />
       {/* Filters */}
-      <Card shadow="sm">
+      <Card  isHoverable
+        className="border border-divider shadow-sm hover:shadow-md transition-shadow duration-300"
+      >
         <CardBody>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Filtros e Busca</h2>
+            <h2 className="text-lg font-bold">Filtros e Busca</h2>
             <Button color="success" size="sm" startContent="📊">
               Exportar Dados
             </Button>
@@ -149,7 +132,7 @@ export function HistoryPage() {
             </thead>
             <tbody>
               {history.map((hist, i) => (
-                <tr className="hover:bg-gray-50">
+                <tr key={hist.request.id} className="hover:bg-gray-50">
                   <td
                     className="p-3 text-blue-600 font-semibold cursor-pointer"
                     onClick={() => abrirModal(i)}

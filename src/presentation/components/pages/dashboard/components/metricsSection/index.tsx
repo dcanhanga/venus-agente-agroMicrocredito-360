@@ -1,5 +1,5 @@
-import { MetricCard } from './metricCard'
 
+import { MetricCard } from '@/presentation/components/molecules'
 import { Dashboard } from '@/types/dashboard'
 
 export function MetricsSection({ data }: { data?: Dashboard }) {
