@@ -16,6 +16,7 @@ import {
 } from '../../../../services/call'
 
 import { delinquencyRate } from '@/presentation/lib/utils'
+import { allLocations } from '@/presentation/lib/data'
 
 export function CooperativesPage() {
   const [name, setName] = useState('')
@@ -23,6 +24,9 @@ export function CooperativesPage() {
   const [location, setLocation] = useState('')
   const [productType, setProductType] = useState('')
   const [productVolume, setProductVolume] = useState(0)
+  const [patrimonioLiquido, setPatrimonioLiquido] = useState(0)
+  const [fundacao, setFundacao] = useState('')
+  const [cooperados, setCooperados] = useState(0)
   const [loading, setLoading] = useState(false)
   const [cooperatives, setCooperatives] = useState([])
 
@@ -42,7 +46,16 @@ export function CooperativesPage() {
 
   async function handleRegisterCooperative() {
     try {
-      if (!name || !nif || !location || !productType || productVolume <= 0) {
+      if (
+        !name ||
+        !nif ||
+        !location ||
+        !productType ||
+        productVolume <= 0 ||
+        patrimonioLiquido <= 0 ||
+        !fundacao ||
+        cooperados <= 0
+      ) {
         toast.error('Preencha todos os campos corretamente!')
 
         return
@@ -57,17 +70,16 @@ export function CooperativesPage() {
         localizacao: location,
         volumeProducao: productVolume,
         indicadoresInadimplencia: delinquencyRate(),
+        patrimonioLiquido,
+        fundacao,
+        cooperados,
       }
 
       await addCooperative(newCoop)
 
       toast.success('Cooperativa cadastrada com sucesso!')
 
-      setName('')
-      setNif('')
-      setLocation('')
-      setProductType('')
-      setProductVolume(0)
+      clearFields()
 
       fetchCooperatives() // recarregar lista
     } catch {
@@ -85,6 +97,17 @@ export function CooperativesPage() {
     } catch {
       toast.error('Erro ao eliminar cooperativa!')
     }
+  }
+
+  async function clearFields() {
+    setName('')
+    setNif('')
+    setLocation('')
+    setProductType('')
+    setProductVolume(0)
+    setPatrimonioLiquido(0)
+    setFundacao('')
+    setCooperados(0)
   }
 
   return (
@@ -106,12 +129,16 @@ export function CooperativesPage() {
               value={nif}
               onChange={(e) => setNif(e.target.value)}
             />
-            <Input
+            <Select
               label="Localização"
-              placeholder="Digite a localização"
-              value={location}
+              placeholder="Selecione a província"
+              selectedKeys={location ? [location] : []}
               onChange={(e) => setLocation(e.target.value)}
-            />
+            >
+              {allLocations.map((loc) => (
+                <SelectItem key={loc}>{loc}</SelectItem>
+              ))}
+            </Select>
             <Select
               label="Tipo de Produto"
               placeholder="Selecione"
@@ -122,26 +149,42 @@ export function CooperativesPage() {
               <SelectItem key="Fishing">Pesca</SelectItem>
               <SelectItem key="Commerce">Comércio</SelectItem>
             </Select>
+
             <Input
               label="Volume do Produto"
               type="number"
               onChange={(e) => setProductVolume(parseInt(e.target.value) || 0)}
               placeholder="Digite o volume"
-              //@ts-ignore
-              value={productVolume}
+              value={productVolume.toString()}
+            />
+            <Input
+              label="Patrimônio Líquido"
+              type="number"
+              onChange={(e) =>
+                setPatrimonioLiquido(parseFloat(e.target.value) || 0)
+              }
+              placeholder="Digite o patrimônio líquido"
+              value={patrimonioLiquido.toString()}
+            />
+            <Input
+              label="Data de Fundação"
+              type="date"
+              onChange={(e) => setFundacao(e.target.value)}
+              value={fundacao}
+            />
+            <Input
+              label="Número de Cooperados"
+              type="number"
+              onChange={(e) => setCooperados(parseInt(e.target.value) || 0)}
+              placeholder="Digite o nº de cooperados"
+              value={cooperados.toString()}
             />
           </div>
           <div className="flex justify-end gap-4">
             <Button
               color="default"
               variant="flat"
-              onClick={() => {
-                setName('')
-                setNif('')
-                setLocation('')
-                setProductType('')
-                setProductVolume(0)
-              }}
+              onClick={() => clearFields()}
             >
               Limpar
             </Button>
@@ -180,9 +223,6 @@ export function CooperativesPage() {
                 {new Date(coop.dataCriacao).toLocaleDateString('pt-PT')}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button color="warning" size="sm">
-                  Editar
-                </Button>
                 <Button
                   color="danger"
                   size="sm"

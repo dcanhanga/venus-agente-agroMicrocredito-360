@@ -9,7 +9,7 @@ import {
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-import { addUser, deleteUser, getUsers } from '../../../../services/call'
+import { addUser, deleteUser, getAllUsers } from '../../../../services/call'
 
 export function UsersPage() {
   const [users, setUsers] = useState<any>([])
@@ -32,7 +32,7 @@ export function UsersPage() {
 
   const carregarUsers = async () => {
     try {
-      const data = await getUsers({
+      const data = await getAllUsers({
         estado: false,
       })
 
@@ -148,12 +148,6 @@ export function UsersPage() {
                 ✏️ Modificado por: {user.modificadoPorNome || '—'}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button color="success" size="sm" isLoading={actionLoading}>
-                  Ver
-                </Button>
-                <Button color="warning" size="sm" isLoading={actionLoading}>
-                  Editar
-                </Button>
                 <Button
                   color="danger"
                   size="sm"

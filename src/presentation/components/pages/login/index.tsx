@@ -30,8 +30,8 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-emerald-500 to-green-900">
-      <Card className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl">
-        <CardBody className="p-8">
+      <Card className="w-full max-w-md bg-white/95 py-9 backdrop-blur-md rounded-2xl shadow-2xl">
+        <CardBody className="p-8 ">
           {/* Logo */}
           <div className="text-center mb-6">
             <h1 className="text-3xl font-bold bg-gradient-to-br from-emerald-500 to-green-900 bg-clip-text text-transparent">
@@ -87,17 +87,6 @@ export function LoginPage() {
               onChange={(e) => setpassword(e.target.value)}
             />
 
-            {/* Esqueceu password */}
-            <div className="text-right">
-              <button
-                className="text-emerald-500 hover:underline text-sm"
-                type="button"
-                onClick={() => alert('Recuperação de password em breve!')}
-              >
-                Esqueceu sua password?
-              </button>
-            </div>
-
             {/* Botão login */}
             <Button
               className="w-full bg-gradient-to-br from-emerald-500 to-green-900 text-white font-semibold rounded-xl"
@@ -108,49 +97,6 @@ export function LoginPage() {
               Entrar
             </Button>
           </form>
-
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="px-4 text-gray-500 text-sm">ou continue com</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          {/* Social login */}
-          <div className="flex gap-4 mb-4">
-            <button
-              className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-red-500"
-              title="Entrar com Google"
-              onClick={() => {}}
-            >
-              🔴
-            </button>
-            <button
-              className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-blue-600"
-              title="Entrar com Facebook"
-              onClick={() => {}}
-            >
-              🔵
-            </button>
-            <button
-              className="flex-1 p-3 border border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition text-black"
-              title="Entrar com Apple"
-              onClick={() => {}}
-            >
-              ⚫
-            </button>
-          </div>
-
-          {/* Link cadastro */}
-          <p className="text-center text-gray-600 text-sm">
-            Não tem uma conta?{' '}
-            <button
-              className="text-emerald-500 font-semibold hover:underline"
-              onClick={() => alert('Cadastro em breve!')}
-            >
-              Cadastre-se aqui
-            </button>
-          </p>
         </CardBody>
       </Card>
     </div>

@@ -160,12 +160,6 @@ export function FinancialInstitutionsPage() {
                 ✏️ Modificado por: {inst.modificadoPorNome}
               </p>
               <div className="flex gap-3 mt-4">
-                <Button color="success" size="sm">
-                  Ver
-                </Button>
-                <Button color="warning" size="sm">
-                  Editar
-                </Button>
                 <Button
                   color="danger"
                   size="sm"

@@ -106,6 +106,19 @@ const getUsers = async (params: any) => {
     throw new Error(error.erro[0])
   }
 }
+const getAllUsers = async (params: any) => {
+  try {
+    const response = await api.get('/api/utilizadores', {
+      params,
+    })
+
+    return response.data.dados
+  } catch (responseError: any) {
+    const error = responseError.response.data
+
+    throw new Error(error.erro[0])
+  }
+}
 const deleteUser = async (userId: number) => {
   try {
     const response = await api.delete(`/api/utilizadores/${userId}`)
@@ -181,4 +194,5 @@ export {
   getAvaliations,
   addDecision,
   addAnalisys,
+  getAllUsers,
 }
