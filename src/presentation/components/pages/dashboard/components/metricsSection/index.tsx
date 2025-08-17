@@ -1,13 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
-
 import { MetricCard } from './metricCard'
 
-import { getDashboard } from '@/services/dasboard'
 import { Dashboard } from '@/types/dashboard'
 
-export function MetricsSection({data}:{data?:Dashboard}) {
-
-
+export function MetricsSection({ data }: { data?: Dashboard }) {
   return (
     <section
       aria-labelledby="metricas-resumo"
@@ -42,7 +37,9 @@ export function MetricsSection({data}:{data?:Dashboard}) {
         value={Intl.NumberFormat('pt-AO', {
           style: 'currency',
           currency: 'AOA',
-        }).format(Number(data?.dados.volumeTotal?.toString().replace(/,/g, "")) ??0)}
+        }).format(
+          Number(data?.dados.volumeTotal?.toString().replace(/,/g, '')) ?? 0,
+        )}
       />
     </section>
   )

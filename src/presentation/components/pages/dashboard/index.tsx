@@ -3,7 +3,7 @@ import { MetricsSection, AnalyticsSection } from './components'
 import { getDashboard } from '@/services/dasboard'
 
 export function DashboardPage() {
-    const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery({
     queryFn: async () => {
       return await getDashboard()
     },
