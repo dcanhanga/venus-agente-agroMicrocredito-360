@@ -22,12 +22,12 @@ const MainRoute = () => {
       <Routes>
         <Route element={<PublicRoute />}>
           <Route element={<AuthLayout />} path="/login">
-            <Route index element={<LoginPage />} path="/login" />
+            <Route index element={<LoginPage />} />
           </Route>
         </Route>
 
         <Route element={<PrivateRoute />}>
-          <Route element={<DefaultLayout />} path="/">
+          <Route element={<DefaultLayout />}>
             {isAdmin ? (
               <>
                 <Route element={<ReportsPage />} path="reports" />
@@ -35,8 +35,8 @@ const MainRoute = () => {
               </>
             ) : (
               <>
-                <Route index element={<DashboardPage />} />
-                <Route element={<HistoryPage />} path="history" />
+                <Route element={<DashboardPage />} path="/" />
+                <Route element={<HistoryPage />} path="/history" />
                 <Route element={<ReviewsPage />} path="/reviews" />
               </>
             )}
