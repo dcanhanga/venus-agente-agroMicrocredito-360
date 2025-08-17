@@ -1,6 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { MetricCard } from './metricCard'
 
-export function MetricsSection() {
+import { getDashboard } from '@/services/dasboard'
+import { Dashboard } from '@/types/dashboard'
+
+export function MetricsSection({data}:{data?:Dashboard}) {
+
+
   return (
     <section
       aria-labelledby="metricas-resumo"
@@ -14,25 +21,28 @@ export function MetricsSection() {
         ariaLabel="23 solicitações pendentes"
         colorClass="text-warning"
         label="Solicitações Pendentes"
-        value={23}
+        value={data?.dados.aprovadasEsteMes ?? 0}
       />
       <MetricCard
         ariaLabel="156 solicitações aprovadas este mês"
         colorClass="text-success"
         label="Aprovadas este Mês"
-        value={156}
+        value={data?.dados.aprovadasEsteMes ?? 0}
       />
       <MetricCard
         ariaLabel="12 solicitações rejeitadas este mês"
         colorClass="text-danger"
         label="Rejeitadas este Mês"
-        value={12}
+        value={data?.dados.rejeitadasEsteMes ?? 0}
       />
       <MetricCard
         ariaLabel="Volume total de 2.4 milhões de kwanzas"
         colorClass="text-primary"
         label="Volume Total"
-        value="2.4M KZ"
+        value={Intl.NumberFormat('pt-AO', {
+          style: 'currency',
+          currency: 'AOA',
+        }).format(Number(data?.dados.volumeTotal?.toString().replace(/,/g, "")) ??0)}
       />
     </section>
   )
