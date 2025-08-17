@@ -1,7 +1,8 @@
+import { Dashboard } from '@/types/dashboard'
 import { LineChartRequest } from './lineChartRequests'
 import { PieChartStatusDistribution } from './pieChartStatusDistribution'
 
-export function AnalyticsSection() {
+export function AnalyticsSection({data}:{data?:Dashboard}) {
   return (
     <section
       aria-labelledby="graficos-analiticos"
@@ -11,9 +12,9 @@ export function AnalyticsSection() {
         Gráficos analíticos
       </h2>
 
-      <LineChartRequest />
+      <LineChartRequest data={data} />
 
-      <PieChartStatusDistribution />
+      <PieChartStatusDistribution data={data} />
     </section>
   )
 }

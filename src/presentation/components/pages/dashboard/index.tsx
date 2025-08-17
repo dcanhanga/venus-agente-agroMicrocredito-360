@@ -1,6 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
 import { MetricsSection, AnalyticsSection } from './components'
+import { getDashboard } from '@/services/dasboard'
 
 export function DashboardPage() {
+    const { data, isLoading, isError } = useQuery({
+    queryFn: async () => {
+      return await getDashboard()
+    },
+    queryKey: ['metrics'],
+  })
   return (
     <main
       aria-labelledby="dashboard-title"
@@ -9,8 +17,8 @@ export function DashboardPage() {
       <h1 className="sr-only" id="dashboard-title">
         Painel de Controle
       </h1>
-      <MetricsSection />
-      <AnalyticsSection />
+      <MetricsSection data={data} />
+      <AnalyticsSection data={data} />
     </main>
   )
 }
