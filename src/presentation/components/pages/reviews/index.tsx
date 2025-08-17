@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { HiOfficeBuilding, HiShieldExclamation } from 'react-icons/hi'
 
 import { ICreditAnalysis } from '@/types'
-import { getAvaliations } from '@/services/call'
+import { getAvaliations, addDecision } from '@/services/call'
 
 export function ReviewsPage() {
   const [evaluation, setEvaluation] = useState<ICreditAnalysis[]>([])
@@ -38,12 +38,14 @@ export function ReviewsPage() {
     filteredEvaluation[selectedAvaliationIndex]?.cooperativa
   const selectedRiskAnalisys =
     filteredEvaluation[selectedAvaliationIndex]?.analisesRisco[0]
-
+  const selectedSolicitation =
+    filteredEvaluation[selectedAvaliationIndex]?.solicitacao
   async function fetchGuarantees() {
     try {
       const data = await getAvaliations({
-        statusSolicitacao: 'REJEITADA',
+        statusSolicitacao: 'PENDENTE',
       })
+      console.log(data)
 
       setEvaluation(data)
       setFilteredEvaluation(data)
@@ -74,7 +76,7 @@ export function ReviewsPage() {
     } catch (error: any) {
       toast.error('Erro ao registrar decisão: ' + error)
     } finally {
-      setLoadingDecision(false) // 🔄 desativa loading nos dois botões
+      setLoadingDecision(false)
     }
   }
 
@@ -103,8 +105,6 @@ export function ReviewsPage() {
         (e) => e.solicitacao.dataSolicitacao <= filters.dataLimite,
       )
     }
-    // Prioridade pode ser adicionada caso exista no backend
-
     setFilteredEvaluation(filtered)
     setSelectedAvaliationIndex(0)
   }
@@ -113,7 +113,6 @@ export function ReviewsPage() {
     fetchGuarantees()
   }, [])
   useEffect(() => {
-    // Quando evaluation mudar, gera lista única de cooperativas
     const uniqueCooperatives = Array.from(
       new Set(evaluation.map((e) => e.cooperativa.nome)),
     )
@@ -347,12 +346,26 @@ export function ReviewsPage() {
               <Textarea
                 label="Observações"
                 placeholder="Observações e justificativas para a decisão..."
+                value={observacoes}
+                onChange={(e) => setObservacoes(e.target.value)}
               />
               <div className="flex gap-2">
-                <Button className="flex-1" color="success">
+                <Button
+                  className="flex-1"
+                  color="success"
+                  isLoading={loadingDecision}
+                  disabled={loadingDecision}
+                  onClick={() => handleDecision(true)}
+                >
                   ✅ Aprovar
                 </Button>
-                <Button className="flex-1" color="danger">
+                <Button
+                  className="flex-1"
+                  color="danger"
+                  isLoading={loadingDecision}
+                  disabled={loadingDecision}
+                  onClick={() => handleDecision(false)}
+                >
                   ❌ Rejeitar
                 </Button>
               </div>
