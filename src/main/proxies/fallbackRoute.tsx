@@ -3,10 +3,12 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../presentation/providers/authContext'
 
 export function FallbackRoute() {
-  const { signed: isAuthenticated } = useAuth()
+  const { signed: isAuthenticated, user } = useAuth()
+  const isAdmin = user?.tipo_utilizador === 'ADMIN'
+
 
   return isAuthenticated ? (
-    <Navigate replace to="/" />
+    <Navigate replace to={isAdmin ? '/reports' : '/'} />
   ) : (
     <Navigate replace to="/login" />
   )
