@@ -312,7 +312,7 @@ export function ReviewsPage() {
                 <>
                   <div className="text-center bg-gray-50 p-5 rounded mb-4">
                     <div className="text-4xl font-bold text-amber-500">
-                      {selectedRiskAnalisys.score.toFixed(2)}
+                      {selectedRiskAnalisys?.score?.toFixed(2)}
                     </div>
                     <div className="text-sm text-gray-500">Score de Risco</div>
                   </div>
