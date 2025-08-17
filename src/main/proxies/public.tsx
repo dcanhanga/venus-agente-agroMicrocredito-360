@@ -5,5 +5,5 @@ import { useAuth } from '../../presentation/providers/authContext'
 export function PublicRoute() {
   const { signed: isAuthenticated } = useAuth()
 
-  return isAuthenticated ? <Navigate replace to="/" /> : <Outlet />
+  return isAuthenticated ? <Navigate replace to="/login" /> : <Outlet />
 }

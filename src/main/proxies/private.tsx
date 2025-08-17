@@ -12,6 +12,6 @@ export function PrivateRoute() {
   return isAuthenticated ? (
     <Outlet />
   ) : (
-    <Navigate replace to={isAdmin ? '/reports' : '/'} />
+    <Navigate replace to={isAdmin ? '/reports' : '/login'} />
   )
 }
