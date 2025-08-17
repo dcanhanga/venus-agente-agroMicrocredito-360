@@ -11,7 +11,12 @@ import {
   HistoryPage,
   CooperativesTab,
 } from '@/presentation/components/pages'
+import { useAuth } from '@/presentation/providers/authContext'
+import { tipo_utilizador } from '@/constants'
 const MainRoute = () => {
+  const { user } = useAuth()
+  const isAdmin = user?.tipo_utilizador === tipo_utilizador.ADMIN
+
   return (
     <>
       <Routes>
@@ -23,11 +28,18 @@ const MainRoute = () => {
 
         <Route element={<PrivateRoute />}>
           <Route element={<DefaultLayout />} path="/">
-            <Route index element={<DashboardPage />} />
-            <Route element={<ReviewsPage />} path="/reviews" />
-            <Route element={<HistoryPage />} path="history" />
-            <Route element={<ReportsPage />} path="reports" />
-            <Route element={<CooperativesTab />} path="cooperatives" />
+            {isAdmin ? (
+              <>
+                <Route element={<ReportsPage />} path="reports" />
+                <Route element={<CooperativesTab />} path="cooperatives" />
+              </>
+            ) : (
+              <>
+                <Route index element={<DashboardPage />} />
+                <Route element={<HistoryPage />} path="history" />
+                <Route element={<ReviewsPage />} path="/reviews" />
+              </>
+            )}
           </Route>
         </Route>
         <Route element={<FallbackRoute />} path="*" />
