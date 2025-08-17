@@ -23,9 +23,10 @@ export function AlteracaoTable({ data }: { data: Alteracao[] }) {
     const end = start + rowsPerPage
 
     return data
-      .map((item) => ({
+      .map((item, i) => ({
         ...item,
         password: item.password === null ? 'Não Alterada' : item.password,
+        key: i,
       }))
       .slice(start, end)
   }, [page, data])
@@ -65,7 +66,7 @@ export function AlteracaoTable({ data }: { data: Alteracao[] }) {
       </TableHeader>
       <TableBody emptyContent={'Nenhuma linha para exibir.'} items={items}>
         {(item) => (
-          <TableRow key={item.id_utilizador}>
+          <TableRow key={item.key}>
             {(columnKey) => (
               <TableCell>{getKeyValue(item, columnKey)}</TableCell>
             )}

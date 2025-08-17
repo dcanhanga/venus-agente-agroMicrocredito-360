@@ -22,7 +22,12 @@ export function UsuariosDeletadoTable({ data }: { data: UsuariosDeletado[] }) {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
 
-    return data.slice(start, end)
+    return data
+      .map((item, i) => ({
+        ...item,
+        key: i,
+      }))
+      .slice(start, end)
   }, [page, data])
 
   return (
@@ -52,7 +57,7 @@ export function UsuariosDeletadoTable({ data }: { data: UsuariosDeletado[] }) {
       </TableHeader>
       <TableBody emptyContent={'Nenhuma linha para exibir.'} items={items}>
         {(item) => (
-          <TableRow key={item.id_utilizador}>
+          <TableRow key={item.key}>
             {(columnKey) => (
               <TableCell>{getKeyValue(item, columnKey)}</TableCell>
             )}
