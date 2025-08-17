@@ -7,13 +7,17 @@ import {
 } from 'react'
 import { toast } from 'react-toastify'
 
-import { STORAGE_TOKEN_KEY, STORAGE_USER_KEY } from '@/constants'
+import {
+  STORAGE_TOKEN_KEY,
+  STORAGE_USER_KEY,
+  tipo_utilizador,
+} from '@/constants'
 import { login } from '@/services/call'
 
 interface IUser {
   id: number
   email: string
-  tipo_utilizador: 'ENTIDADE' | 'ADMIN'
+  tipo_utilizador: 'ENTIDADE' | 'ADMIN' | 'COOPERATIVA'
   dataCriacao: string
   dataAtualizacao: string
   modificadoPorNome: string | null
@@ -57,6 +61,9 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
       const response: LoginResponse = await login(email, password)
       const { token, utilizador } = response.dados[0]
 
+      if (utilizador.tipo_utilizador === tipo_utilizador.COOPERATIVA) {
+        throw new Error('Credências Invalidas')
+      }
       setUser(utilizador)
       localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(utilizador))
       localStorage.setItem(STORAGE_TOKEN_KEY, token)
