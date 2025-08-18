@@ -1,4 +1,5 @@
 export const appTheme = {
+  defaultTheme: "light",
   themes: {
     light: {
       colors: {
