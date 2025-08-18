@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Select,
   SelectItem,
   Modal,
@@ -9,8 +8,6 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  Chip,
-  Pagination,
   Card,
   CardBody,
 } from '@heroui/react'
@@ -18,18 +15,30 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { HiOutlineInformationCircle } from 'react-icons/hi'
 
+import { GuaranteeGrid } from '../../molecules/guaranteeGrid'
+
 import { HistoricalDecisionsMetrics } from './metricsSection'
+import { HistoryAnalysisTable } from './historyAnalysisTable'
 
 import { transformevaluationToHistory } from '@/presentation/lib'
 import { getAvaliations } from '@/services/call'
 import { IHistoryAnalysis } from '@/types'
 import { exportExcel } from '@/presentation/lib/exportXls'
-import { GuaranteeGrid } from '../../molecules/guaranteeGrid'
+const arrayValues = (values: Set<string>) => Array.from(values)
+
 export function HistoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [selectedId, setSelectedId] = useState<number | undefined>()
   const [history, setHistory] = useState<IHistoryAnalysis[]>([])
+  const [statusSolicitacao, setStatusSolicitacao] = useState<string>('HISTORY')
+  const [values, setValues] = useState(new Set(['HISTORY']))
 
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValues(new Set(e.target.value.split(',')))
+  }
+  const filterByStatus = () => {
+    setStatusSolicitacao(arrayValues(values)[0])
+  }
   const abrirModal = (id: number) => {
     setSelectedId(id)
     onOpen()
@@ -38,7 +47,7 @@ export function HistoryPage() {
   async function fetchHistory() {
     try {
       const data = await getAvaliations({
-        statusSolicitacao: 'HISTORY',
+        statusSolicitacao: statusSolicitacao,
       })
 
       setHistory(transformevaluationToHistory(data))
@@ -48,7 +57,7 @@ export function HistoryPage() {
   }
   useEffect(() => {
     fetchHistory()
-  }, [])
+  }, [statusSolicitacao])
 
   return (
     <div className="max-w-[1400px] mx-auto p-5 space-y-6">
@@ -65,132 +74,47 @@ export function HistoryPage() {
               color="success"
               size="sm"
               startContent="📊"
-              onClick={() => exportExcel(history)}
+              onPress={() => exportExcel(history)}
             >
               Exportar Dados
             </Button>
           </div>
 
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
-            <Select defaultSelectedKeys={['todos']} label="Status">
-              <SelectItem key="todos">Todos</SelectItem>
-              <SelectItem key="aprovadas">Aprovadas</SelectItem>
-              <SelectItem key="rejeitadas">Rejeitadas</SelectItem>
+            <Select
+              defaultSelectedKeys={['HISTORY']}
+              label="Status"
+              selectedKeys={values}
+              onChange={handleSelectionChange}
+            >
+              <SelectItem key="HISTORY">Todos</SelectItem>
+              <SelectItem key="APROVADA">Aprovadas</SelectItem>
+              <SelectItem key="REJEITADA">Rejeitadas</SelectItem>
             </Select>
 
-            <Select label="Cooperativa">
+            {/* <Select label="Cooperativa">
               <SelectItem>Todas</SelectItem>
               <SelectItem>Cooperativa São João</SelectItem>
               <SelectItem>Cooperativa Agro Sul</SelectItem>
               <SelectItem>Cooperativa Verde Campo</SelectItem>
-            </Select>
+            </Select> */}
 
-            <Input defaultValue="2024-01-01" label="Data Inicial" type="date" />
+            {/* <Input defaultValue="2024-01-01" label="Data Inicial" type="date" />
             <Input defaultValue="2024-06-15" label="Data Final" type="date" />
-            <Input label="Valor Mínimo" placeholder="R$ 0" type="number" />
-            <Button color="primary" startContent="🔍">
+            <Input label="Valor Mínimo" placeholder="R$ 0" type="number" /> */}
+            <Button color="primary" startContent="🔍" onPress={filterByStatus}>
               Buscar
             </Button>
-            <Button color="secondary" startContent="🔄">
+            {/* <Button color="secondary" startContent="🔄">
               Limpar
-            </Button>
+            </Button> */}
           </div>
         </CardBody>
       </Card>
 
       {/* Results Table */}
-      <Card shadow="sm">
-        <CardBody className="overflow-x-auto">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="font-semibold text-gray-700">Resultados</h2>
-            <span className="text-sm text-gray-500">
-              Mostrando 1-25 de 1,403 registros
-            </span>
-          </div>
 
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-50">
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  ID Solicitação
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Cooperativa
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Valor
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Status
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Data Decisão
-                </th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Solicitante
-                </th>
-                {/* <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Tempo Análise
-                </th> */}
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">
-                  Ações
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((hist, i) => (
-                <tr key={hist.request.id} className="hover:bg-gray-50">
-                  <td
-                    className="p-3 text-blue-600 font-semibold cursor-pointer"
-                    onClick={() => abrirModal(i)}
-                  >
-                    # {hist.request.id}
-                  </td>
-                  <td className="p-3"> {hist.cooperative.nome}</td>
-                  <td className="p-3 font-semibold text-green-600">
-                    KZ {hist.request.valorSolicitado}
-                  </td>
-                  <td className="p-3">
-                    <Chip
-                      color={
-                        hist.request.status == 'APROVADA' ? 'success' : 'danger'
-                      }
-                      size="sm"
-                      variant="flat"
-                    >
-                      {hist.request.status}
-                    </Chip>
-                  </td>
-                  <td className="p-3 text-sm text-gray-500">
-                    {hist.request.dataSolicitacao}
-                  </td>
-                  <td className="p-3 text-sm text-gray-500">
-                    {hist.requester.email}
-                  </td>
-                  {/* <td className="p-3">6 horas</td> */}
-                  <td className="p-3 flex gap-2">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="flat"
-                      onPress={() => abrirModal(i)}
-                    >
-                      👁️
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="flex justify-between items-center mt-4">
-            <span className="text-sm text-gray-500">
-              Mostrando 1 a 25 de 1,403 registros
-            </span>
-            <Pagination initialPage={1} total={57} />
-          </div>
-        </CardBody>
-      </Card>
+      <HistoryAnalysisTable abrirModal={abrirModal} data={history} />
 
       {/* Detail Modal */}
       <Modal

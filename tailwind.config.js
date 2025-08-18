@@ -1,17 +1,18 @@
-import {heroui} from "@heroui/theme"
-import {appTheme} from './src/presentation/styles/appTheme'
+import { heroui } from '@heroui/theme'
+import { appTheme } from './src/presentation/styles/appTheme'
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
+    './index.html',
     './src/layouts/**/*.{js,ts,jsx,tsx,mdx}',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,ts,jsx,tsx,mdx}',
-    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
+    './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {},
   },
-  darkMode: "class",
+  darkMode: 'class',
+
   plugins: [heroui(appTheme)],
 }

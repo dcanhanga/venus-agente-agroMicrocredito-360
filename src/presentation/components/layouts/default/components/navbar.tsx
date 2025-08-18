@@ -9,8 +9,6 @@ import { PanelRight } from 'lucide-react'
 
 import { useSidebar } from '../../../../hooks/use-sidebar'
 
-import { ThemeSwitch } from './theme-switch'
-
 import { useAuth } from '@/presentation/providers/authContext'
 
 export const Navbar = () => {
@@ -42,9 +40,6 @@ export const Navbar = () => {
         </Tooltip>
       </NavbarContent>
       <NavbarContent className="flex gap-4" justify="end">
-        <NavbarMenuItem>
-          <ThemeSwitch />
-        </NavbarMenuItem>
         <NavbarMenuItem>
           {user != null && (
             <span>
