@@ -1,4 +1,3 @@
-
 import { MetricCard } from '@/presentation/components/molecules'
 import { Dashboard } from '@/types/dashboard'
 
@@ -6,18 +5,12 @@ export function MetricsSection({ data }: { data?: Dashboard }) {
   return (
     <section
       aria-labelledby="metricas-resumo"
-      className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]"
+      className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]"
     >
       <h2 className="sr-only" id="metricas-resumo">
         Resumo de métricas
       </h2>
 
-      <MetricCard
-        ariaLabel="23 solicitações pendentes"
-        colorClass="text-warning"
-        label="Solicitações Pendentes"
-        value={data?.dados.aprovadasEsteMes ?? 0}
-      />
       <MetricCard
         ariaLabel="156 solicitações aprovadas este mês"
         colorClass="text-success"
